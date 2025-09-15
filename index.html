@@ -1,118 +1,167 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>eLegalBoom — Request Your Document</title>
   <style>
-    :root {
-      --bg: #ffffff;
-      --panel: #f9f9f9;
-      --text: #222222;
-      --accent: #004aad;
-      --border: #cccccc;
+    :root{
+      --bg:#ffffff; --beige:#f8f4ec; --text:#222222; --muted:#666666;
+      --panel:#ffffff; --panel-border:#e5e7eb; --field-border:#d1d5db;
+      --placeholder:#9aa3b2; --accent:#0b4a92; --accent-hover:#083a73;
+      --shadow:0 10px 30px rgba(0,0,0,.06);
     }
-
-    body {
-      font-family: Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      margin: 0;
-      padding: 0;
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    .topbar{background:var(--bg);border-bottom:3px solid var(--beige)}
+    .container{max-width:900px;margin:0 auto;padding:24px}
+    .badge{display:inline-block;font-size:12px;color:var(--muted);background:#fafafa;border:1px solid #ececec;padding:6px 10px;border-radius:999px}
+    .hero{padding:28px 0 10px}
+    .hero h1{margin:0 0 6px 0;font-size:32px}
+    .hero p{margin:0;color:var(--muted)}
+    .card{background:var(--panel);border:1px solid var(--panel-border);border-radius:14px;padding:20px;margin:16px 0;box-shadow:var(--shadow)}
+    label{display:block;font-weight:600;margin:10px 0 6px}
+    input[type=text],input[type=email],select,textarea{
+      width:100%;padding:12px;border:1px solid var(--field-border);border-radius:10px;background:#fff;color:var(--text)
     }
-
-    .container {
-      max-width: 600px;
-      margin: 40px auto;
-      padding: 20px;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-
-    h1 {
-      font-size: 24px;
-      margin-bottom: 10px;
-    }
-
-    label {
-      font-weight: bold;
-      display: block;
-      margin: 12px 0 6px;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      font-size: 14px;
-    }
-
-    textarea {
-      resize: vertical;
-      height: 80px;
-    }
-
-    button {
-      margin-top: 20px;
-      width: 100%;
-      padding: 12px;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #00327a;
-    }
-
-    .disclaimer {
-      font-size: 12px;
-      color: #555;
-      margin-top: 12px;
-    }
+    input::placeholder,textarea::placeholder{color:var(--placeholder)}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    @media (max-width:720px){.grid{grid-template-columns:1fr}}
+    .checkbox{display:flex;gap:10px;align-items:flex-start;color:var(--muted)}
+    .btn{background:var(--accent);color:#fff;border:none;border-radius:999px;padding:12px 18px;font-weight:700;cursor:pointer}
+    .btn:hover{background:var(--accent-hover)}
+    .muted{color:var(--muted)}
+    .small{font-size:12px}
+    .footer{margin-top:30px;border-top:1px solid var(--panel-border);padding-top:12px;color:var(--muted)}
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Request Your Document</h1>
-    <p>Fast, accurate, affordable. Human-reviewed. Delivered to your inbox.</p>
-
-    <form id="requestForm" method="POST" action="https://script.google.com/macros/s/AKfycbxirMiGTQ0QmUGLUxCcuSX1_qasnfRxBL1ycs08z-LTmF9CxgHeivGrVqGi2D_MuRpt/exec">
-      <label for="name">Full Name</label>
-      <input type="text" name="name" id="name" required>
-
-      <label for="email">Email</label>
-      <input type="email" name="email" id="email" required>
-
-      <label for="doc_type">Document Type</label>
-      <select name="doc_type" id="doc_type" required>
-        <option value="">Select one...</option>
-        <option value="LLC">LLC Formation</option>
-        <option value="Partnership">Partnership Agreement</option>
-        <option value="NDA">Non-Disclosure Agreement</option>
-      </select>
-
-      <label for="urgency">Urgency</label>
-      <select name="urgency" id="urgency">
-        <option value="Normal">Normal (2–3 days)</option>
-        <option value="Rush">Rush (24 hours)</option>
-      </select>
-
-      <label for="details">Details (parties, dates, state, terms)</label>
-      <textarea name="details" id="details"></textarea>
-
-      <div class="disclaimer">
-        <input type="checkbox" required> I understand eLegalBoom provides AI-assisted document preparation with human QC and is not a law firm, nor does it provide legal advice.
-      </div>
-
-      <button type="submit">Submit Request</button>
-    </form>
+  <div class="topbar">
+    <div class="container">
+      <span class="badge">AI-powered document prep — <strong>Not a law firm</strong></span>
+    </div>
   </div>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Request Your Document</h1>
+      <p class="muted">Fast, accurate, affordable. Human-reviewed. Delivered to your inbox.</p>
+    </section>
+
+    <section class="card">
+      <form id="requestForm" autocomplete="on">
+        <div class="grid">
+          <div>
+            <label for="name">Full Name</label>
+            <input id="name" type="text" placeholder="Jane Doe" required />
+          </div>
+          <div>
+            <label for="email">Email</label>
+            <input id="email" type="email" placeholder="you@example.com" required />
+          </div>
+        </div>
+
+        <div class="grid">
+          <div>
+            <label for="docType">Document Type</label>
+            <select id="docType" required>
+              <option value="" disabled selected>Select one…</option>
+              <option>LLC Operating Agreement</option>
+              <option>Partnership Agreement</option>
+              <option>NDA / Confidentiality Agreement</option>
+              <option>Copyright Filing</option>
+              <option>Trademark Filing</option>
+              <option>Custom / Other</option>
+            </select>
+          </div>
+          <div>
+            <label for="urgency">Urgency</label>
+            <select id="urgency" required>
+              <option value="Normal (2–3 days)">Normal (2–3 days)</option>
+              <option value="Rush (24 hours)">Rush (24 hours)</option>
+            </select>
+          </div>
+        </div>
+
+        <label for="details">Details (parties, dates, state, special terms)</label>
+        <textarea id="details" rows="6" placeholder="Provide key facts we need to draft your document…" required></textarea>
+
+        <input type="hidden" id="orderId" />
+        <input type="hidden" id="stripeSessionId" />
+
+        <div class="checkbox" style="margin:12px 0 18px">
+          <input id="ack" type="checkbox" required />
+          <label for="ack" class="muted small">
+            I understand eLegalBoom provides AI-assisted document preparation with human QC and is not a law firm, nor does it provide legal advice.
+          </label>
+        </div>
+
+        <button class="btn" type="submit">Submit Request</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h3>What happens next?</h3>
+      <ol class="muted">
+        <li>We review your intake and start preparation.</li>
+        <li>You’ll receive confirmation and delivery by email.</li>
+        <li>Questions? Reply to the confirmation and include your Order #.</li>
+      </ol>
+    </section>
+
+    <div class="footer small">
+      <div>© eLegalBoom. Privacy: we use your information only to prepare your document. We don’t sell your data.</div>
+    </div>
+  </main>
+
+  <script>
+    function genOrderId(){
+      const y = new Date().getFullYear();
+      const r = Math.floor(100000 + Math.random()*900000);
+      return `ELB-${y}-${r}`;
+    }
+    function qp(name){ return new URLSearchParams(location.search).get(name) || ""; }
+
+    (function boot(){
+      const presetDoc = qp('doc');
+      if(presetDoc){
+        const sel = document.getElementById('docType');
+        let matched = false;
+        for (const o of sel.options){ if(o.text === presetDoc){ o.selected = true; matched = true; break; } }
+        if(!matched){ sel.value = "Custom / Other"; document.getElementById('details').value = `[Requested: ${presetDoc}] `; }
+      }
+      document.getElementById('orderId').value = genOrderId();
+      document.getElementById('stripeSessionId').value = qp('sid');
+    })();
+
+    document.getElementById("requestForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const payload = {
+        order_id: document.getElementById('orderId').value,
+        stripe_session_id: document.getElementById('stripeSessionId').value,
+        name: document.getElementById('name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        doc_type: document.getElementById('docType').value,
+        urgency: document.getElementById('urgency').value,
+        details: document.getElementById('details').value.trim()
+      };
+
+      const WEBHOOK = "https://script.google.com/macros/s/AKfycbzi97Mkld1q6vS4b3SRnOWyEGn9D-svMbn2I0glwq-SQQiON-bx1_gJGyXnFP4fDWU/exec";
+
+      try{
+        await fetch(WEBHOOK, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      } catch(err){
+        console.error("Webhook error", err);
+      }
+
+      const q = new URLSearchParams({ order: payload.order_id });
+      window.location.href = `success.html?${q.toString()}`;
+    });
+  </script>
 </body>
 </html>
