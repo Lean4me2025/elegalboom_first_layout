@@ -3,59 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>eLegalBoom — Request Your Document</title>
+  <title>eLegalBoom – Request Your Document</title>
   <style>
+    :root {
+      --bg: #ffffff;
+      --panel: #f9f9f9;
+      --text: #222222;
+      --accent: #004aad;
+      --border: #cccccc;
+    }
     body {
       font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      color: #222;
+      background: var(--bg);
+      color: var(--text);
       margin: 0;
       padding: 20px;
     }
     .container {
       max-width: 600px;
-      margin: 0 auto;
+      margin: 40px auto;
       padding: 20px;
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
-    h1 {
-      font-size: 24px;
-      margin-bottom: 10px;
-    }
-    label {
-      font-weight: bold;
-      display: block;
-      margin: 12px 0 6px;
-    }
+    h1 { font-size: 24px; margin-bottom: 10px; }
+    label { font-weight: bold; display: block; margin: 12px 0 6px; }
     input, select, textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
+      width: 100%; padding: 10px;
+      border: 1px solid var(--border);
       border-radius: 4px;
       font-size: 14px;
     }
+    textarea { resize: vertical; height: 80px; }
     button {
       margin-top: 20px;
-      width: 100%;
-      padding: 12px;
-      background: #0066cc;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      font-size: 16px;
+      width: 100%; padding: 12px;
+      background: var(--accent);
+      color: #fff; border: none;
+      border-radius: 4px; font-size: 16px;
       cursor: pointer;
     }
-    button:hover {
-      background: #004a99;
-    }
-    .disclaimer {
-      font-size: 12px;
-      color: #555;
-      margin-top: 12px;
-    }
+    button:hover { background: #00327a; }
+    .disclaimer { font-size: 12px; color: #555; margin-top: 12px; }
   </style>
 </head>
 <body>
@@ -63,15 +54,13 @@
     <h1>Request Your Document</h1>
     <p>Fast, accurate, affordable. Human-reviewed. Delivered to your inbox.</p>
 
-    <form id="requestForm" method="POST" 
-      action="https://script.google.com/macros/s/AKfycbxiMiGTQ0QmUGLUxCcuSX1_qasnfRxBL1ycs08z-LTmF9CxgHeivGrVqGi2D_MuRpt/exec">
-      
+    <form id="requestForm" method="POST" action="https://script.google.com/macros/s/AKfycbxirMiGTQ0QmUGLUxCcuSX1_qasnfRxBL1ycs08z-LTmF9CxgHeivGrVqGi2D_MuRpt/exec">
       <label for="name">Full Name</label>
       <input type="text" name="name" id="name" required>
-      
+
       <label for="email">Email</label>
       <input type="email" name="email" id="email" required>
-      
+
       <label for="doc_type">Document Type</label>
       <select name="doc_type" id="doc_type" required>
         <option value="">Select one...</option>
@@ -79,21 +68,21 @@
         <option value="Partnership">Partnership Agreement</option>
         <option value="NDA">Non-Disclosure Agreement</option>
       </select>
-      
+
       <label for="urgency">Urgency</label>
-      <select name="urgency" id="urgency">
+      <select name="urgency" id="urgency" required>
         <option value="Normal">Normal (2–3 days)</option>
         <option value="Rush">Rush (24 hours)</option>
       </select>
-      
+
       <label for="details">Details (parties, dates, terms)</label>
       <textarea name="details" id="details"></textarea>
-      
+
       <div class="disclaimer">
-        <input type="checkbox" required>
-        I understand eLegalBoom provides AI-assisted document preparation with human QC and is not a law firm, nor does it provide legal advice.
+        <input type="checkbox" id="disclaimer" required>
+        <label for="disclaimer">I understand eLegalBoom provides AI-assisted document preparation with human QC and is not a law firm, nor does it provide legal advice.</label>
       </div>
-      
+
       <button type="submit">Submit Request</button>
     </form>
   </div>
