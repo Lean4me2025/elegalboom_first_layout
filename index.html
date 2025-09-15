@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>eLegalBoom — Request a Document</title>
+  <meta name="description" content="Request AI-powered legal documents with human QC. Not a law firm.">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <script>
+    // Simple Order ID generator (client-side) for linking intake to payment/Stripe if desired
+    function generateOrderId() {
+      const now = new Date();
+      const y = now.getFullYear();
+      const rand = Math.floor(Math.random() * 1e6).toString().padStart(6, '0');
+      return `ELB-${y}-${rand}`;
+    }
+
+    // Parse query params (e.g., ?doc=LLC&sid=...)
+    function getQueryParams() {
+      const params = new URLSearchParams(window.location.search);
+      return {
+        doc: params.get('doc') || '',
+        sid: params.get('sid') || '',
+        order: params.get('order') || ''
+      };
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const qp = getQueryParams();
+      const orderInput = document.getElementById('order_id');
+      const sessionInput = document.getElementById('stripe_session_id');
+      const docSelect = document.getElementById('doc_type');
+
+      // Set Order ID (use provided ?order=... else generate)
+      orderInput.value = qp.order || generateOrderId();
+
+      // Stripe session id passthrough (if coming from Stripe success_url)
+      if (qp.sid) sessionInput.value = qp.sid;
+
+      // Preselect doc
+      if (qp.doc) {
+        for (const opt of docSelect.options) {
+          if (opt.value.toLowerCase() === qp.doc.toLowerCase()) {
+            docSelect.value = opt.value;
+            break;
+          }
+        }
+      }
+
+      // Accessibility: autofocus name
+      const nameField = document.getElementById('name');
+      if (nameField) nameField.focus();
+    });
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container">
+      <span class="badge">AI‑Powered Document Prep — Not a Law Firm</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Request Your Document</h1>
+      <p>Fast, accurate, affordable. Human‑reviewed. Delivered to your inbox.</p>
+    </section>
+
+    <section class="card">
+      <form id="intakeForm" method="POST" action="/api/submit" novalidate>
+        <!-- Hidden tracking fields -->
+        <input type="hidden" id="order_id" name="order_id" value="">
+        <input type="hidden" id="stripe_session_id" name="stripe_session_id" value="">
+
+        <div class="grid">
+          <div class="field">
+            <label for="name">Full Name</label>
+            <input id="name" name="name" type="text" required placeholder="Jane Doe">
+          </div>
+
+          <div class="field">
+            <label for="email">Email <span class="req">*</span></label>
+            <input id="email" name="email" type="email" required placeholder="you@example.com">
+          </div>
+
+          <div class="field">
+            <label for="doc_type">Document Type</label>
+            <select id="doc_type" name="doc_type" required>
+              <option value="" disabled selected>Select one…</option>
+              <option value="LLC Operating Agreement">LLC Operating Agreement</option>
+              <option value="Partnership Agreement">Partnership Agreement</option>
+              <option value="NDA / Confidentiality Agreement">NDA / Confidentiality Agreement</option>
+              <option value="Copyright Filing">Copyright Filing</option>
+              <option value="Trademark Filing">Trademark Filing</option>
+              <option value="Employment Agreement">Employment Agreement</option>
+              <option value="Other">Other (describe below)</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="urgency">Urgency</label>
+            <select id="urgency" name="urgency">
+              <option value="Normal (2-3 days)">Normal (2‑3 days)</option>
+              <option value="Rush (24 hours)">Rush (24 hours)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="details">Details (parties, dates, state, special terms)</label>
+          <textarea id="details" name="details" rows="6" placeholder="Provide the key facts we need to draft your document…"></textarea>
+        </div>
+
+        <div class="field">
+          <label class="checkbox">
+            <input type="checkbox" name="ack" required>
+            <span>I understand eLegalBoom provides AI‑assisted document preparation with human QC and is not a law firm, nor does it provide legal advice.</span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn">Submit Request</button>
+        <p class="muted small">After you submit, we’ll confirm by email and begin preparation. You’ll receive a secure link to your draft for review.</p>
+      </form>
+    </section>
+
+    <section class="faq">
+      <h2>What happens next?</h2>
+      <ol>
+        <li>You submit this form (and pay if you used our checkout first).</li>
+        <li>We review and draft your document.</li>
+        <li>You receive a secure link to review and download.</li>
+      </ol>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© <span id="y"></span> eLegalBoom • Confidential & Secure</p>
+      <p class="muted">Disclaimer: We are not a law firm and do not provide legal advice. For legal representation, consult a licensed attorney.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
