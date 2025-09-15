@@ -1,149 +1,167 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>eLegalBoom — Request a Document</title>
-  <meta name="description" content="Request AI-powered legal documents with human QC. Not a law firm.">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css">
-  <script>
-    // Simple Order ID generator (client-side) for linking intake to payment/Stripe if desired
-    function generateOrderId() {
-      const now = new Date();
-      const y = now.getFullYear();
-      const rand = Math.floor(Math.random() * 1e6).toString().padStart(6, '0');
-      return `ELB-${y}-${rand}`;
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>eLegalBoom — Request Your Document</title>
+  <style>
+    :root{
+      --bg:#ffffff; --beige:#f8f4ec; --text:#222222; --muted:#666666;
+      --panel:#ffffff; --panel-border:#e5e7eb; --field-border:#d1d5db;
+      --placeholder:#9aa3b2; --accent:#0b4a92; --accent-hover:#083a73;
+      --shadow:0 10px 30px rgba(0,0,0,.06);
     }
-
-    // Parse query params (e.g., ?doc=LLC&sid=...)
-    function getQueryParams() {
-      const params = new URLSearchParams(window.location.search);
-      return {
-        doc: params.get('doc') || '',
-        sid: params.get('sid') || '',
-        order: params.get('order') || ''
-      };
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    .topbar{background:var(--bg);border-bottom:3px solid var(--beige)}
+    .container{max-width:900px;margin:0 auto;padding:24px}
+    .badge{display:inline-block;font-size:12px;color:var(--muted);background:#fafafa;border:1px solid #ececec;padding:6px 10px;border-radius:999px}
+    .hero{padding:28px 0 10px}
+    .hero h1{margin:0 0 6px 0;font-size:32px}
+    .hero p{margin:0;color:var(--muted)}
+    .card{background:var(--panel);border:1px solid var(--panel-border);border-radius:14px;padding:20px;margin:16px 0;box-shadow:var(--shadow)}
+    label{display:block;font-weight:600;margin:10px 0 6px}
+    input[type=text],input[type=email],select,textarea{
+      width:100%;padding:12px;border:1px solid var(--field-border);border-radius:10px;background:#fff;color:var(--text)
     }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const qp = getQueryParams();
-      const orderInput = document.getElementById('order_id');
-      const sessionInput = document.getElementById('stripe_session_id');
-      const docSelect = document.getElementById('doc_type');
-
-      // Set Order ID (use provided ?order=... else generate)
-      orderInput.value = qp.order || generateOrderId();
-
-      // Stripe session id passthrough (if coming from Stripe success_url)
-      if (qp.sid) sessionInput.value = qp.sid;
-
-      // Preselect doc
-      if (qp.doc) {
-        for (const opt of docSelect.options) {
-          if (opt.value.toLowerCase() === qp.doc.toLowerCase()) {
-            docSelect.value = opt.value;
-            break;
-          }
-        }
-      }
-
-      // Accessibility: autofocus name
-      const nameField = document.getElementById('name');
-      if (nameField) nameField.focus();
-    });
-  </script>
+    input::placeholder,textarea::placeholder{color:var(--placeholder)}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    @media (max-width:720px){.grid{grid-template-columns:1fr}}
+    .checkbox{display:flex;gap:10px;align-items:flex-start;color:var(--muted)}
+    .btn{background:var(--accent);color:#fff;border:none;border-radius:999px;padding:12px 18px;font-weight:700;cursor:pointer}
+    .btn:hover{background:var(--accent-hover)}
+    .muted{color:var(--muted)}
+    .small{font-size:12px}
+    .footer{margin-top:30px;border-top:1px solid var(--panel-border);padding-top:12px;color:var(--muted)}
+  </style>
 </head>
 <body>
-  <header class="topbar">
+  <div class="topbar">
     <div class="container">
-      <span class="badge">AI‑Powered Document Prep — Not a Law Firm</span>
+      <span class="badge">AI-powered document prep — <strong>Not a law firm</strong></span>
     </div>
-  </header>
+  </div>
 
   <main class="container">
     <section class="hero">
       <h1>Request Your Document</h1>
-      <p>Fast, accurate, affordable. Human‑reviewed. Delivered to your inbox.</p>
+      <p class="muted">Fast, accurate, affordable. Human-reviewed. Delivered to your inbox.</p>
     </section>
 
     <section class="card">
-      <form id="intakeForm" method="POST" action="/api/submit" novalidate>
-        <!-- Hidden tracking fields -->
-        <input type="hidden" id="order_id" name="order_id" value="">
-        <input type="hidden" id="stripe_session_id" name="stripe_session_id" value="">
+      <form id="requestForm" autocomplete="on">
+        <div class="grid">
+          <div>
+            <label for="name">Full Name</label>
+            <input id="name" type="text" placeholder="Jane Doe" required />
+          </div>
+          <div>
+            <label for="email">Email</label>
+            <input id="email" type="email" placeholder="you@example.com" required />
+          </div>
+        </div>
 
         <div class="grid">
-          <div class="field">
-            <label for="name">Full Name</label>
-            <input id="name" name="name" type="text" required placeholder="Jane Doe">
-          </div>
-
-          <div class="field">
-            <label for="email">Email <span class="req">*</span></label>
-            <input id="email" name="email" type="email" required placeholder="you@example.com">
-          </div>
-
-          <div class="field">
-            <label for="doc_type">Document Type</label>
-            <select id="doc_type" name="doc_type" required>
+          <div>
+            <label for="docType">Document Type</label>
+            <select id="docType" required>
               <option value="" disabled selected>Select one…</option>
-              <option value="LLC Operating Agreement">LLC Operating Agreement</option>
-              <option value="Partnership Agreement">Partnership Agreement</option>
-              <option value="NDA / Confidentiality Agreement">NDA / Confidentiality Agreement</option>
-              <option value="Copyright Filing">Copyright Filing</option>
-              <option value="Trademark Filing">Trademark Filing</option>
-              <option value="Employment Agreement">Employment Agreement</option>
-              <option value="Other">Other (describe below)</option>
+              <option>LLC Operating Agreement</option>
+              <option>Partnership Agreement</option>
+              <option>NDA / Confidentiality Agreement</option>
+              <option>Copyright Filing</option>
+              <option>Trademark Filing</option>
+              <option>Custom / Other</option>
             </select>
           </div>
-
-          <div class="field">
+          <div>
             <label for="urgency">Urgency</label>
-            <select id="urgency" name="urgency">
-              <option value="Normal (2-3 days)">Normal (2‑3 days)</option>
+            <select id="urgency" required>
+              <option value="Normal (2–3 days)">Normal (2–3 days)</option>
               <option value="Rush (24 hours)">Rush (24 hours)</option>
             </select>
           </div>
         </div>
 
-        <div class="field">
-          <label for="details">Details (parties, dates, state, special terms)</label>
-          <textarea id="details" name="details" rows="6" placeholder="Provide the key facts we need to draft your document…"></textarea>
-        </div>
+        <label for="details">Details (parties, dates, state, special terms)</label>
+        <textarea id="details" rows="6" placeholder="Provide key facts we need to draft your document…" required></textarea>
 
-        <div class="field">
-          <label class="checkbox">
-            <input type="checkbox" name="ack" required>
-            <span>I understand eLegalBoom provides AI‑assisted document preparation with human QC and is not a law firm, nor does it provide legal advice.</span>
+        <input type="hidden" id="orderId" />
+        <input type="hidden" id="stripeSessionId" />
+
+        <div class="checkbox" style="margin:12px 0 18px">
+          <input id="ack" type="checkbox" required />
+          <label for="ack" class="muted small">
+            I understand eLegalBoom provides AI-assisted document preparation with human QC and is not a law firm, nor does it provide legal advice.
           </label>
         </div>
 
-        <button type="submit" class="btn">Submit Request</button>
-        <p class="muted small">After you submit, we’ll confirm by email and begin preparation. You’ll receive a secure link to your draft for review.</p>
+        <button class="btn" type="submit">Submit Request</button>
       </form>
     </section>
 
-    <section class="faq">
-      <h2>What happens next?</h2>
-      <ol>
-        <li>You submit this form (and pay if you used our checkout first).</li>
-        <li>We review and draft your document.</li>
-        <li>You receive a secure link to review and download.</li>
+    <section class="card">
+      <h3>What happens next?</h3>
+      <ol class="muted">
+        <li>We review your intake and start preparation.</li>
+        <li>You’ll receive confirmation and delivery by email.</li>
+        <li>Questions? Reply to the confirmation and include your Order #.</li>
       </ol>
     </section>
+
+    <div class="footer small">
+      <div>© eLegalBoom. Privacy: we use your information only to prepare your document. We don’t sell your data.</div>
+    </div>
   </main>
 
-  <footer class="footer">
-    <div class="container">
-      <p>© <span id="y"></span> eLegalBoom • Confidential & Secure</p>
-      <p class="muted">Disclaimer: We are not a law firm and do not provide legal advice. For legal representation, consult a licensed attorney.</p>
-    </div>
-  </footer>
-
   <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
+    function genOrderId(){
+      const y = new Date().getFullYear();
+      const r = Math.floor(100000 + Math.random()*900000);
+      return `ELB-${y}-${r}`;
+    }
+    function qp(name){ return new URLSearchParams(location.search).get(name) || ""; }
+
+    (function boot(){
+      const presetDoc = qp('doc');
+      if(presetDoc){
+        const sel = document.getElementById('docType');
+        let matched = false;
+        for (const o of sel.options){ if(o.text === presetDoc){ o.selected = true; matched = true; break; } }
+        if(!matched){ sel.value = "Custom / Other"; document.getElementById('details').value = `[Requested: ${presetDoc}] `; }
+      }
+      document.getElementById('orderId').value = genOrderId();
+      document.getElementById('stripeSessionId').value = qp('sid');
+    })();
+
+    document.getElementById("requestForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const payload = {
+        order_id: document.getElementById('orderId').value,
+        stripe_session_id: document.getElementById('stripeSessionId').value,
+        name: document.getElementById('name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        doc_type: document.getElementById('docType').value,
+        urgency: document.getElementById('urgency').value,
+        details: document.getElementById('details').value.trim()
+      };
+
+      const WEBHOOK = "https://script.google.com/macros/s/AKfycbzi97Mkld1q6vS4b3SRnOWyEGn9D-svMbn2I0glwq-SQQiON-bx1_gJGyXnFP4fDWU/exec";
+
+      try{
+        await fetch(WEBHOOK, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      } catch(err){
+        console.error("Webhook error", err);
+      }
+
+      const q = new URLSearchParams({ order: payload.order_id });
+      window.location.href = `success.html?${q.toString()}`;
+    });
   </script>
 </body>
 </html>
