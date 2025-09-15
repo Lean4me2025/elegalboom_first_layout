@@ -1,342 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>eLegalBoom — Master Intake</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>eLegalBoom – Request Your Document</title>
   <style>
-    :root{ --bg:#ffffff; --panel:#f9f9f9; --text:#222; --muted:#666; --accent:#0b4a92; --border:#d9d9d9;}
-    *{box-sizing:border-box}
-    body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);margin:0;padding:24px}
-    .container{max-width:980px;margin:0 auto}
-    .card{background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);padding:22px;margin-bottom:18px}
-    h1{margin:0 0 6px}
-    p.lead{margin:0 0 14px;color:var(--muted)}
-    label{display:block;font-weight:700;margin:12px 0 6px}
-    input,select,textarea{width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:#fff;font-size:14px}
-    textarea{min-height:96px;resize:vertical}
-    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-    @media (max-width:780px){.grid-2,.grid-3{grid-template-columns:1fr}}
-    .disclaimer{font-size:12px;color:var(--muted);margin-top:10px;text-align:center}
-    .center{display:flex;justify-content:center}
-    .btn{background:var(--accent);color:#fff;border:0;border-radius:999px;padding:12px 18px;font-weight:700;cursor:pointer;margin-top:16px;width:100%}
-    .section-title{margin:18px 0 6px;font-size:18px}
-    .hint{font-size:12px;color:var(--muted)}
-    .hidden{display:none}
-    .hr{height:1px;background:var(--border);margin:16px 0}
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 20px;
+      color: #222;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    h1 { margin-bottom: 10px; }
+    p { margin-top: 0; }
+    label {
+      font-weight: bold;
+      display: block;
+      margin: 12px 0 4px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    textarea {
+      resize: vertical;
+      height: 80px;
+    }
+    .row {
+      display: flex;
+      gap: 12px;
+    }
+    .row > div {
+      flex: 1;
+    }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 14px;
+      background: #0077cc;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #005fa3;
+    }
+    .disclaimer {
+      text-align: center;
+      font-size: 12px;
+      color: #555;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="card">
-      <h1>Request Your Document</h1>
-      <p class="lead">Fast, accurate, affordable. Human‑reviewed. Delivered to your inbox.</p>
+    <h1>Request Your Document</h1>
+    <p>Fast, accurate, affordable. Human-reviewed. Delivered to your inbox.</p>
 
-      <div class="hint">Config: set your Apps Script Web App URL (ends with <code>/exec</code>) in <code>WEBHOOK_URL</code> below.</div>
-
-      <form id="intakeForm" novalidate>
-        <!-- Hidden system fields -->
-        <input type="hidden" id="order_id" name="order_id" />
-        <input type="hidden" id="stripe_session_id" name="stripe_session_id" />
-
-        <div class="section-title">Contact</div>
-        <div class="grid-2">
-          <div>
-            <label for="first_name">First Name</label>
-            <input id="first_name" name="first_name" required />
-          </div>
-          <div>
-            <label for="last_name">Last Name</label>
-            <input id="last_name" name="last_name" required />
-          </div>
+    <form id="requestForm" method="POST" action="https://script.google.com/macros/s/AKfycbymI0RnR22SX20KN_tzeYsXmBIFdMSmhqx0jXrgFmEKUqRhHQHEF2DdVu4nh0ZvUTyM/exec">
+      
+      <div class="row">
+        <div>
+          <label for="first_name">First Name</label>
+          <input type="text" id="first_name" required>
         </div>
-        <div class="grid-2">
-          <div>
-            <label for="email">Email</label>
-            <input id="email" name="email" type="email" required />
-          </div>
-          <div>
-            <label for="phone">Phone (optional)</label>
-            <input id="phone" name="phone" />
-          </div>
+        <div>
+          <label for="last_name">Last Name</label>
+          <input type="text" id="last_name" required>
         </div>
+      </div>
+      <input type="hidden" name="name" id="name">
 
-        <div class="section-title">Business / Address</div>
-        <label for="entity_name">Business / Entity Name (optional)</label>
-        <input id="entity_name" name="entity_name" />
-
-        <div class="grid-3">
-          <div>
-            <label for="address_street">Street</label>
-            <input id="address_street" name="address_street" />
-          </div>
-          <div>
-            <label for="address_city">City</label>
-            <input id="address_city" name="address_city" />
-          </div>
-          <div>
-            <label for="address_state">State</label>
-            <select id="address_state" name="address_state" required>
-              <option value="">Select…</option>
-              <option>AL</option><option>AK</option><option>AZ</option><option>AR</option>
-              <option>CA</option><option>CO</option><option>CT</option><option>DE</option>
-              <option>FL</option><option>GA</option><option>HI</option><option>ID</option>
-              <option>IL</option><option>IN</option><option>IA</option><option>KS</option>
-              <option>KY</option><option>LA</option><option>ME</option><option>MD</option>
-              <option>MA</option><option>MI</option><option>MN</option><option>MS</option>
-              <option>MO</option><option>MT</option><option>NE</option><option>NV</option>
-              <option>NH</option><option>NJ</option><option>NM</option><option>NY</option>
-              <option>NC</option><option>ND</option><option>OH</option><option>OK</option>
-              <option>OR</option><option>PA</option><option>RI</option><option>SC</option>
-              <option>SD</option><option>TN</option><option>TX</option><option>UT</option>
-              <option>VT</option><option>VA</option><option>WA</option><option>WV</option>
-              <option>WI</option><option>WY</option>
-            </select>
-          </div>
+      <div class="row">
+        <div>
+          <label for="email">Email</label>
+          <input type="email" name="email" id="email" required>
         </div>
-        <div class="grid-3">
-          <div>
-            <label for="address_zip">ZIP</label>
-            <input id="address_zip" name="address_zip" />
-          </div>
-          <div>
-            <label for="governing_state">Governing State (if different)</label>
-            <input id="governing_state" name="governing_state" placeholder="Defaults to Address State" />
-          </div>
-          <div>
-            <label for="preferred_deadline">Preferred Deadline</label>
-            <input id="preferred_deadline" name="preferred_deadline" type="date" />
-          </div>
+        <div>
+          <label for="phone">Phone (optional)</label>
+          <input type="text" id="phone">
         </div>
+      </div>
 
-        <div class="section-title">What do you need?</div>
-        <div class="grid-2">
-          <div>
-            <label for="doc_type">Document Type</label>
-            <select id="doc_type" name="doc_type" required>
-              <option value="">Select…</option>
-              <option value="LLC">LLC Operating Agreement</option>
-              <option value="Partnership">Partnership Agreement</option>
-              <option value="NDA">NDA (Mutual / One‑way)</option>
-              <option value="WFH">Copyright Work‑for‑Hire</option>
-              <option value="Other">Custom / Other</option>
-            </select>
-          </div>
-          <div>
-            <label for="urgency">Urgency</label>
-            <select id="urgency" name="urgency" required>
-              <option value="Normal">Normal (2–3 days)</option>
-              <option value="Rush">Rush (24 hours)</option>
-            </select>
-          </div>
+      <label for="doc_type">Document Type</label>
+      <select name="doc_type" id="doc_type" required>
+        <option value="">Select one…</option>
+        <option value="LLC">LLC Formation</option>
+        <option value="Partnership">Partnership Agreement</option>
+        <option value="NDA">Non-Disclosure Agreement</option>
+      </select>
+
+      <label for="urgency">Urgency</label>
+      <select name="urgency" id="urgency" required>
+        <option value="Normal">Normal (2–3 days)</option>
+        <option value="Rush">Rush (24 hours)</option>
+      </select>
+
+      <label for="details">Details (key facts, terms)</label>
+      <textarea name="details" id="details"></textarea>
+
+      <fieldset>
+        <legend>Parties (add up to 4)</legend>
+        <div class="row">
+          <div><input type="text" placeholder="Party 1 Name"></div>
+          <div><input type="text" placeholder="Role"></div>
+          <div><input type="email" placeholder="Email (optional)"></div>
         </div>
-
-        <label for="project_title">Short Title (optional)</label>
-        <input id="project_title" name="project_title" placeholder="e.g., NDA for supplier onboarding" />
-
-        <label for="details">Details (key facts, special terms)</label>
-        <textarea id="details" name="details" placeholder="Anything we should know to draft accurately…"></textarea>
-
-        <div class="hr"></div>
-
-        <div class="section-title">Parties (add up to 4)</div>
-        <div class="grid-3">
-          <div><label>Party 1 Name</label><input name="party1_name" /></div>
-          <div><label>Role</label><input name="party1_role" placeholder="Member, Partner, Disclosing…" /></div>
-          <div><label>Email (optional)</label><input name="party1_email" type="email" /></div>
+        <div class="row">
+          <div><input type="text" placeholder="Party 2 Name"></div>
+          <div><input type="text" placeholder="Role"></div>
+          <div><input type="email" placeholder="Email (optional)"></div>
         </div>
-        <div class="grid-3">
-          <div><label>Party 2 Name</label><input name="party2_name" /></div>
-          <div><label>Role</label><input name="party2_role" /></div>
-          <div><label>Email (optional)</label><input name="party2_email" type="email" /></div>
+        <div class="row">
+          <div><input type="text" placeholder="Party 3 Name"></div>
+          <div><input type="text" placeholder="Role"></div>
+          <div><input type="email" placeholder="Email (optional)"></div>
         </div>
-        <div class="grid-3">
-          <div><label>Party 3 Name</label><input name="party3_name" /></div>
-          <div><label>Role</label><input name="party3_role" /></div>
-          <div><label>Email (optional)</label><input name="party3_email" type="email" /></div>
+        <div class="row">
+          <div><input type="text" placeholder="Party 4 Name"></div>
+          <div><input type="text" placeholder="Role"></div>
+          <div><input type="email" placeholder="Email (optional)"></div>
         </div>
-        <div class="grid-3">
-          <div><label>Party 4 Name</label><input name="party4_name" /></div>
-          <div><label>Role</label><input name="party4_role" /></div>
-          <div><label>Email (optional)</label><input name="party4_email" type="email" /></div>
-        </div>
+      </fieldset>
 
-        <div class="hr"></div>
+      <fieldset>
+        <legend>How do you want to file?</legend>
+        <label><input type="radio" name="filing" value="self" required> I will download, sign, and file myself. (No service charge)</label><br>
+        <label><input type="radio" name="filing" value="assisted"> Please have eLegalBoom file for me. (Service fee TBD)</label>
+      </fieldset>
 
-        <!-- LLC Section -->
-        <div id="section_llc" class="hidden">
-          <div class="section-title">LLC Details</div>
-          <div class="grid-2">
-            <div>
-              <label for="llc_state_of_formation">State of Formation</label>
-              <input id="llc_state_of_formation" name="llc_state_of_formation" />
-            </div>
-            <div>
-              <label for="llc_management_type">Management Type</label>
-              <select id="llc_management_type" name="llc_management_type">
-                <option value="">Select…</option>
-                <option>Member-managed</option>
-                <option>Manager-managed</option>
-              </select>
-            </div>
-          </div>
-          <div class="grid-3">
-            <div><label>Member 1 Name</label><input name="llc_member1_name" /></div>
-            <div><label>Member 1 %</label><input name="llc_member1_pct" /></div>
-            <div><label>Effective Date</label><input name="llc_effective_date" type="date" /></div>
-          </div>
-          <div class="grid-3">
-            <div><label>Member 2 Name</label><input name="llc_member2_name" /></div>
-            <div><label>Member 2 %</label><input name="llc_member2_pct" /></div>
-            <div><label>Member 3 Name (optional)</label><input name="llc_member3_name" /></div>
-          </div>
-          <div class="grid-2">
-            <div><label>Member 3 % (optional)</label><input name="llc_member3_pct" /></div>
-            <div><label>Principal Address (optional)</label><input name="llc_principal_address" /></div>
-          </div>
-        </div>
+      <div class="disclaimer">
+        I understand eLegalBoom provides AI-assisted document preparation with human QC and is not a law firm, nor does it provide legal advice.
+      </div>
 
-        <!-- Partnership Section -->
-        <div id="section_pship" class="hidden">
-          <div class="section-title">Partnership Details</div>
-          <label>Partnership Name</label><input name="pship_name" />
-          <div class="grid-3">
-            <div><label>Partner 1 Name</label><input name="pship_partner1_name" /></div>
-            <div><label>Partner 1 %</label><input name="pship_partner1_pct" /></div>
-            <div><label>Partner 2 Name</label><input name="pship_partner2_name" /></div>
-          </div>
-          <div class="grid-3">
-            <div><label>Partner 2 %</label><input name="pship_partner2_pct" /></div>
-            <div><label>Partner 3 Name (optional)</label><input name="pship_partner3_name" /></div>
-            <div><label>Partner 3 % (optional)</label><input name="pship_partner3_pct" /></div>
-          </div>
-          <div class="grid-2">
-            <div>
-              <label>Decision Rule</label>
-              <select name="pship_decision_rule">
-                <option value="">Select…</option>
-                <option>Unanimous</option>
-                <option>Majority</option>
-              </select>
-            </div>
-            <div><label>Effective Date</label><input name="pship_effective_date" type="date" /></div>
-          </div>
-          <label>Capital Contributions (optional)</label><input name="pship_capital_notes" />
-        </div>
-
-        <!-- NDA Section -->
-        <div id="section_nda" class="hidden">
-          <div class="section-title">NDA Details</div>
-          <div class="grid-3">
-            <div>
-              <label>NDA Type</label>
-              <select name="nda_type">
-                <option value="">Select…</option>
-                <option>Mutual</option>
-                <option>One-way</option>
-              </select>
-            </div>
-            <div><label>Disclosing Party</label><input name="nda_disclosing_party" /></div>
-            <div><label>Receiving Party</label><input name="nda_receiving_party" /></div>
-          </div>
-          <div class="grid-2">
-            <div><label>Term (years)</label><input name="nda_term_years" /></div>
-            <div><label>Effective Date</label><input name="nda_effective_date" type="date" /></div>
-          </div>
-          <label>Purpose of Disclosure</label><input name="nda_purpose" />
-        </div>
-
-        <!-- Work-for-Hire Section -->
-        <div id="section_wfh" class="hidden">
-          <div class="section-title">Work‑for‑Hire Details</div>
-          <div class="grid-2">
-            <div><label>Client Party</label><input name="wfh_client_party" /></div>
-            <div><label>Creator Party</label><input name="wfh_creator_party" /></div>
-          </div>
-          <label>Work Description</label><input name="wfh_work_description" />
-          <div class="grid-2">
-            <div><label>Delivery Date</label><input name="wfh_delivery_date" type="date" /></div>
-            <div><label>Compensation (optional)</label><input name="wfh_compensation" /></div>
-          </div>
-        </div>
-
-        <div class="hr"></div>
-
-        <div class="section-title">How do you want to file?</div>
-        <label>
-          <input type="radio" name="filing_option" value="Customer_File" required />
-          I will download, sign, and file myself. <span class="hint">(No service charge)</span>
-        </label><br/>
-        <label>
-          <input type="radio" name="filing_option" value="eLegalBoom_File" required />
-          Please have eLegalBoom file for me. <span class="hint">(Service fee TBD)</span>
-        </label>
-
-        <div class="disclaimer center" style="margin-top:16px;">
-          <label style="display:flex;gap:8px;align-items:flex-start;max-width:760px;text-align:center;">
-            <input type="checkbox" id="disclaimer" required />
-            <span>I understand eLegalBoom provides AI‑assisted document preparation with human QC and is not a law firm, nor does it provide legal advice.</span>
-          </label>
-        </div>
-
-        <button class="btn" type="submit">Submit Request</button>
-      </form>
-    </div>
+      <button type="submit">Submit Request</button>
+    </form>
   </div>
 
   <script>
-    // ==== CONFIG ====
-    const WEBHOOK_URL = "PASTE_YOUR_APPS_SCRIPT_EXEC_URL_HERE"; // must end with /exec
-
-    function showSections(){
-      const v = document.getElementById('doc_type').value;
-      const map = { 'LLC':'section_llc','Partnership':'section_pship','NDA':'section_nda','WFH':'section_wfh' };
-      ['section_llc','section_pship','section_nda','section_wfh'].forEach(id => {
-        document.getElementById(id).classList.add('hidden');
-      });
-      if (map[v]) document.getElementById(map[v]).classList.remove('hidden');
-    }
-    document.getElementById('doc_type').addEventListener('change', showSections);
-
-    function genOrderId(){
-      const y = new Date().getFullYear();
-      const r = Math.floor(100000 + Math.random()*900000);
-      return `ELB-${y}-${r}`;
-    }
-    function qp(name){ return new URLSearchParams(location.search).get(name) || ""; }
-
-    document.getElementById('intakeForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const form = e.currentTarget;
-
-      const oidInput = document.getElementById('order_id');
-      if (!oidInput.value) oidInput.value = genOrderId();
-      const gs = document.getElementById('governing_state');
-      if (!gs.value) gs.value = document.getElementById('address_state').value || '';
-      document.getElementById('stripe_session_id').value = qp('sid');
-
-      const data = new FormData(form);
-      const payload = Object.fromEntries(data.entries());
-
-      try {
-        const resp = await fetch(WEBHOOK_URL, {
-          method: 'POST',
-          headers: {'Content-Type':'application/json'},
-          body: JSON.stringify(payload)
-        });
-        const result = await resp.json().catch(() => ({}));
-        if (resp.ok && result && (result.ok || result.status === 'success')) {
-          const q = new URLSearchParams({ order: payload.order_id });
-          window.location.href = 'success.html?' + q.toString();
-        } else {
-          alert('Save failed. Please try again or contact support.');
-          console.error('Webhook response', resp.status, result);
-        }
-      } catch (err) {
-        alert('Network error sending your request. Please try again.');
-        console.error(err);
-      }
+    // Auto-combine first and last name into hidden "name" field
+    document.getElementById('requestForm').addEventListener('submit', function() {
+      document.getElementById('name').value =
+        document.getElementById('first_name').value + ' ' +
+        document.getElementById('last_name').value;
     });
   </script>
 </body>
