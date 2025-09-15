@@ -1,45 +1,33 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>eLegalBoom — Request Your Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>eLegalBoom – Request Your Document</title>
   <style>
-    :root{
+    :root {
       --bg:#ffffff; --beige:#f8f4ec; --text:#222222; --muted:#666666;
-      --panel:#ffffff; --panel-border:#e5e7eb; --field-border:#d1d5db;
-      --placeholder:#9aa3b2; --accent:#0b4a92; --accent-hover:#083a73;
-      --shadow:0 10px 30px rgba(0,0,0,.06);
+      --panel:#ffffff; --panel-border:#e5e7eb; --field-border:#d0d0d0;
+      --placeholder:#9a9a9a; --accent:#0869a2; --accent-hover:#083a60;
+      --shadow:0 12px 30px rgba(0,0,0,0.08);
     }
     *{box-sizing:border-box}
-    html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-    .topbar{background:var(--bg);border-bottom:3px solid var(--beige)}
-    .container{max-width:900px;margin:0 auto;padding:24px}
-    .badge{display:inline-block;font-size:12px;color:var(--muted);background:#fafafa;border:1px solid #ececec;padding:6px 10px;border-radius:999px}
-    .hero{padding:28px 0 10px}
-    .hero h1{margin:0 0 6px 0;font-size:32px}
-    .hero p{margin:0;color:var(--muted)}
-    .card{background:var(--panel);border:1px solid var(--panel-border);border-radius:14px;padding:20px;margin:16px 0;box-shadow:var(--shadow)}
-    label{display:block;font-weight:600;margin:10px 0 6px}
-    input[type=text],input[type=email],select,textarea{
-      width:100%;padding:12px;border:1px solid var(--field-border);border-radius:10px;background:#fff;color:var(--text)
-    }
-    input::placeholder,textarea::placeholder{color:var(--placeholder)}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-    @media (max-width:720px){.grid{grid-template-columns:1fr}}
-    .checkbox{display:flex;gap:10px;align-items:flex-start;color:var(--muted)}
-    .btn{background:var(--accent);color:#fff;border:none;border-radius:999px;padding:12px 18px;font-weight:700;cursor:pointer}
-    .btn:hover{background:var(--accent-hover)}
-    .muted{color:var(--muted)}
-    .small{font-size:12px}
-    .footer{margin-top:30px;border-top:1px solid var(--panel-border);padding-top:12px;color:var(--muted)}
+    html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    .topbar{background:var(--beige);border-bottom:1px solid var(--panel-border);padding:8px 0;text-align:center}
+    .container{max-width:960px;margin:0 auto;padding:20px}
+    .hero h1{margin:0 0 8px;font-size:32px}
+    .card{background:var(--panel);border:1px solid var(--panel-border);border-radius:14px;padding:20px;margin:14px 0;box-shadow:var(--shadow)}
+    label{display:block;font-weight:600;margin:12px 0 6px}
+    input,select,textarea{width:100%;padding:12px;border:1px solid var(--field-border);border-radius:10px}
+    input::placeholder, textarea::placeholder{color:var(--placeholder)}
+    button{background:var(--accent);color:#fff;border:none;border-radius:999px;padding:12px 18px;font-weight:700;cursor:pointer}
+    button:hover{background:var(--accent-hover)}
+    footer{margin-top:30px;padding-top:12px;border-top:1px solid var(--panel-border);color:var(--muted);font-size:12px;text-align:center}
   </style>
 </head>
 <body>
   <div class="topbar">
-    <div class="container">
-      <span class="badge">AI-powered document prep — <strong>Not a law firm</strong></span>
-    </div>
+    <span class="badge">AI-powered document prep — <strong>Not a law firm</strong></span>
   </div>
 
   <main class="container">
@@ -50,71 +38,47 @@
 
     <section class="card">
       <form id="requestForm" autocomplete="on">
-        <div class="grid">
-          <div>
-            <label for="name">Full Name</label>
-            <input id="name" type="text" placeholder="Jane Doe" required />
-          </div>
-          <div>
-            <label for="email">Email</label>
-            <input id="email" type="email" placeholder="you@example.com" required />
-          </div>
-        </div>
+        <label for="name">Full Name</label>
+        <input id="name" type="text" placeholder="Jane Doe" required>
 
-        <div class="grid">
-          <div>
-            <label for="docType">Document Type</label>
-            <select id="docType" required>
-              <option value="" disabled selected>Select one…</option>
-              <option>LLC Operating Agreement</option>
-              <option>Partnership Agreement</option>
-              <option>NDA / Confidentiality Agreement</option>
-              <option>Copyright Filing</option>
-              <option>Trademark Filing</option>
-              <option>Custom / Other</option>
-            </select>
-          </div>
-          <div>
-            <label for="urgency">Urgency</label>
-            <select id="urgency" required>
-              <option value="Normal (2–3 days)">Normal (2–3 days)</option>
-              <option value="Rush (24 hours)">Rush (24 hours)</option>
-            </select>
-          </div>
-        </div>
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="you@example.com" required>
+
+        <label for="docType">Document Type</label>
+        <select id="docType" required>
+          <option value="">Select one…</option>
+          <option>Partnership Agreement</option>
+          <option>LLC Operating Agreement</option>
+          <option>NDA (Non‑Disclosure)</option>
+          <option>Custom / Other</option>
+        </select>
+
+        <label for="urgency">Urgency</label>
+        <select id="urgency">
+          <option>Normal (2–3 days)</option>
+          <option>Rush (24 hours)</option>
+        </select>
 
         <label for="details">Details (parties, dates, state, special terms)</label>
-        <textarea id="details" rows="6" placeholder="Provide key facts we need to draft your document…" required></textarea>
+        <textarea id="details" rows="4" placeholder="Provide key facts we need to draft your document…"></textarea>
 
-        <input type="hidden" id="orderId" />
-        <input type="hidden" id="stripeSessionId" />
-
-        <div class="checkbox" style="margin:12px 0 18px">
-          <input id="ack" type="checkbox" required />
-          <label for="ack" class="muted small">
-            I understand eLegalBoom provides AI-assisted document preparation with human QC and is not a law firm, nor does it provide legal advice.
-          </label>
+        <div style="margin:12px 0;">
+          <input type="checkbox" id="consent" required>
+          <label for="consent">I understand eLegalBoom provides AI-assisted document preparation with human QC and is not a law firm, nor does it provide legal advice.</label>
         </div>
 
-        <button class="btn" type="submit">Submit Request</button>
+        <button type="submit">Submit Request</button>
       </form>
     </section>
-
-    <section class="card">
-      <h3>What happens next?</h3>
-      <ol class="muted">
-        <li>We review your intake and start preparation.</li>
-        <li>You’ll receive confirmation and delivery by email.</li>
-        <li>Questions? Reply to the confirmation and include your Order #.</li>
-      </ol>
-    </section>
-
-    <div class="footer small">
-      <div>© eLegalBoom. Privacy: we use your information only to prepare your document. We don’t sell your data.</div>
-    </div>
   </main>
 
+  <footer>
+    © 2025 eLegalBoom. All rights reserved.
+  </footer>
+
   <script>
+    const WEBHOOK = "https://script.google.com/macros/s/AKfycbzi97Mkld1q6vS4b3SRnOWyEGn9D-svMbn2I0glwq-SQQiON-bx1_gJGyXnFP4fDWU/exec";
+
     function genOrderId(){
       const y = new Date().getFullYear();
       const r = Math.floor(100000 + Math.random()*900000);
@@ -126,9 +90,16 @@
       const presetDoc = qp('doc');
       if(presetDoc){
         const sel = document.getElementById('docType');
-        let matched = false;
-        for (const o of sel.options){ if(o.text === presetDoc){ o.selected = true; matched = true; break; } }
-        if(!matched){ sel.value = "Custom / Other"; document.getElementById('details').value = `[Requested: ${presetDoc}] `; }
+        let matched=false;
+        for(const o of sel.options){ if(o.text===presetDoc){ o.selected=true; matched=true; break; } }
+        if(!matched){ sel.value="Custom / Other"; document.getElementById('details').value = `[Requested: ${presetDoc}] `; }
+      }
+      const form=document.getElementById('requestForm');
+      if(!document.getElementById('orderId')){
+        const h1=document.createElement('input'); h1.type='hidden'; h1.id='orderId'; form.appendChild(h1);
+      }
+      if(!document.getElementById('stripeSessionId')){
+        const h2=document.createElement('input'); h2.type='hidden'; h2.id='stripeSessionId'; form.appendChild(h2);
       }
       document.getElementById('orderId').value = genOrderId();
       document.getElementById('stripeSessionId').value = qp('sid');
@@ -136,7 +107,6 @@
 
     document.getElementById("requestForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-
       const payload = {
         order_id: document.getElementById('orderId').value,
         stripe_session_id: document.getElementById('stripeSessionId').value,
@@ -146,19 +116,13 @@
         urgency: document.getElementById('urgency').value,
         details: document.getElementById('details').value.trim()
       };
-
-      const WEBHOOK = "https://script.google.com/macros/s/AKfycbzi97Mkld1q6vS4b3SRnOWyEGn9D-svMbn2I0glwq-SQQiON-bx1_gJGyXnFP4fDWU/exec";
-
       try{
         await fetch(WEBHOOK, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
         });
-      } catch(err){
-        console.error("Webhook error", err);
-      }
-
+      }catch(err){ console.error("Webhook error", err); }
       const q = new URLSearchParams({ order: payload.order_id });
       window.location.href = `success.html?${q.toString()}`;
     });
