@@ -123,25 +123,30 @@
     </div>
   </div>
 
-  <script src="https://unpkg.com/@supabase/supabase-js"></script>
-  <script>
-    const SUPABASE_URL = "YOUR_SUPABASE_URL";
-    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
-    const { createClient } = supabase;
-    const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+<script src="https://unpkg.com/@supabase/supabase-js"></script>
+<script>
+  const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4aWZudmkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTcyNjQ2NTEwMiwiZXhwIjoxNzU4MDAxMTAyfQ.3S-BY02lFFbDa7tH9Vf7fXr2z-SFQZ4yzpW3gqN6tH8";
 
-    document.getElementById('intakeForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const formData = new FormData(e.target);
-      const data = Object.fromEntries(formData.entries());
-      const { error } = await _supabase.from('requests').insert([data]);
-      if (error) {
-        alert('Error submitting request: ' + error.message);
-      } else {
-        alert('Request submitted successfully!');
-        e.target.reset();
-      }
-    });
+  const { createClient } = supabase;
+  const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  document.getElementById("intakeForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+
+    const { error } = await supabaseClient.from("requests").insert([data]);
+
+    if (error) {
+      alert("Error submitting request: " + error.message);
+    } else {
+      alert("Request submitted successfully!");
+      e.target.reset();
+    }
+  });
+</script>
   </script>
 </body>
 </html>
