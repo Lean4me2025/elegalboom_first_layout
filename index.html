@@ -1,273 +1,267 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>eLegalBoom — Request Your Document</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>eLegalBoom — Document Request</title>
   <style>
     :root{
-      --bg:#f7f7fb; --panel:#ffffff; --text:#1f2937; --muted:#6b7280; --accent:#0f62fe; --border:#e5e7eb;
+      --bg:#f7f7fb; --panel:#ffffff; --text:#222; --muted:#666; --accent:#0a66ff; --border:#e5e7eb;
     }
     *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif}
-    .container{max-width:980px;margin:24px auto;padding:24px;border-radius:14px;background:var(--panel);box-shadow:0 10px 30px rgba(16,24,40,.06), 0 1px 3px rgba(16,24,40,.06);border:1px solid var(--border)}
-    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-    .badge{background:#f3f4f6;color:#111827;padding:6px 10px;border-radius:999px;font-size:12px;border:1px solid var(--border)}
-    h1{font-size:32px;margin:0 0 4px}
-    .muted{color:var(--muted);margin-top:0}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .block{display:block}
-    label{font-weight:600;font-size:14px}
-    input[type="text"], input[type="email"], input[type="tel"], select, textarea{
-      width:100%;padding:12px;border:1px solid var(--border);border-radius:10px;background:#fff;font-size:14px
+    body{
+      margin:0; padding:24px; color:var(--text); background:var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Arial, sans-serif;
+      line-height:1.35;
     }
-    textarea{min-height:90px;resize:vertical}
-    .full{grid-column:1/-1}
-    .actions{margin-top:18px}
-    button{
-      width:100%;padding:14px 18px;border-radius:999px;border:0;background:var(--accent);color:#fff;font-weight:700;font-size:16px;cursor:pointer
+    .container{
+      max-width:980px; margin:0 auto; background:var(--panel); border:1px solid var(--border);
+      border-radius:12px; padding:28px 28px 36px; box-shadow:0 6px 26px rgba(0,0,0,.06);
     }
-    button:disabled{opacity:.5;cursor:not-allowed}
-    .disclaimer{
-      margin-top:16px;text-align:center;color:var(--muted);font-size:12px
+    h1{font-size:40px; margin:0 0 4px}
+    .sub{color:var(--muted); margin:0 0 18px}
+    .config-hint{
+      display:inline-block; font-size:13px; color:#0f5132; background:#d1e7dd; border:1px solid #badbcc;
+      padding:6px 10px; border-radius:999px; margin:6px 0 22px;
     }
-    .disclaimer .checkline{
-      display:flex;align-items:center;justify-content:center;gap:10px;
-      padding:10px 12px;border:1px solid var(--border);border-radius:999px;background:#f9fafb
+    .grid{display:grid; grid-template-columns:repeat(12, 1fr); gap:14px}
+    label{font-weight:600; font-size:14px}
+    input, select, textarea{
+      width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:8px; font-size:15px;
+      background:#fff;
     }
-    .radio-row{display:flex;gap:18px;align-items:center}
-    .section-title{grid-column:1/-1;margin:8px 0 0 0;color:#111827}
+    textarea{min-height:110px; resize:vertical}
+    .col-12{grid-column:span 12}
+    .col-6{grid-column:span 6}
+    .col-4{grid-column:span 4}
+    .col-3{grid-column:span 3}
+    .fieldset{margin-top:18px; padding-top:8px; border-top:1px dashed var(--border)}
+    .muted{color:var(--muted); font-size:13px}
+    .row{display:flex; gap:18px; align-items:center}
+    .radio-row{display:flex; gap:16px; align-items:center; flex-wrap:wrap; margin-top:6px}
+    .btn{
+      margin-top:18px; width:100%; padding:14px 16px; font-weight:700; border:0; border-radius:10px;
+      background:var(--accent); color:white; font-size:16px; cursor:pointer;
+    }
+    .footer-note{margin-top:14px; text-align:center; font-size:12.5px; color:var(--muted)}
+    .center{display:flex; justify-content:center; margin-top:12px}
+    .pill{padding:2px 8px; border-radius:999px; font-size:12px; background:#eef2ff; border:1px solid #dbeafe; color:#1e3a8a}
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="topbar">
-      <div>
-        <h1>Request Your Document</h1>
-        <p class="muted">Fast, accurate, affordable. Human-reviewed. Delivered to your inbox.</p>
+    <h1>Request Your Document</h1>
+    <p class="sub">Fast, accurate, affordable. Human‑reviewed. Delivered to your inbox.</p>
+
+    <form id="intakeForm" class="grid">
+      <div class="col-12"><span id="configHint" class="config-hint" style="display:none">Config needed: set your <strong>SUPABASE_URL</strong> and <strong>SUPABASE_ANON_KEY</strong> inside this file.</span></div>
+
+      <div class="col-12"><label class="pill">Contact</label></div>
+      <div class="col-6">
+        <label for="first_name">First Name</label>
+        <input id="first_name" name="first_name" required>
       </div>
-      <span class="badge" id="configHint" style="display:none;">Config needed: set Supabase keys.</span>
-    </div>
+      <div class="col-6">
+        <label for="last_name">Last Name</label>
+        <input id="last_name" name="last_name" required>
+      </div>
+      <div class="col-6">
+        <label for="email">Email</label>
+        <input id="email" type="email" name="email" required>
+      </div>
+      <div class="col-6">
+        <label for="phone">Phone</label>
+        <input id="phone" name="phone">
+      </div>
 
-    <form id="requestForm" autocomplete="on">
-      <div class="grid">
-        <div>
-          <label for="first_name" class="block">First Name</label>
-          <input id="first_name" name="first_name" type="text" required/>
-        </div>
-        <div>
-          <label for="last_name" class="block">Last Name</label>
-          <input id="last_name" name="last_name" type="text" required/>
-        </div>
+      <div class="col-12"><label class="pill">Business / Address</label></div>
+      <div class="col-12">
+        <label for="business_name">Business / Entity Name (optional)</label>
+        <input id="business_name" name="business_name">
+      </div>
+      <div class="col-12">
+        <label for="street">Street</label>
+        <input id="street" name="street">
+      </div>
+      <div class="col-4">
+        <label for="city">City</label>
+        <input id="city" name="city">
+      </div>
+      <div class="col-4">
+        <label for="state">State</label>
+        <select id="state" name="state">
+          <option value="">Select…</option>
+          <option value="AL">Alabama</option><option value="AK">Alaska</option><option value="AZ">Arizona</option>
+          <option value="AR">Arkansas</option><option value="CA">California</option><option value="CO">Colorado</option>
+          <option value="CT">Connecticut</option><option value="DE">Delaware</option><option value="DC">District of Columbia</option>
+          <option value="FL">Florida</option><option value="GA">Georgia</option><option value="HI">Hawaii</option>
+          <option value="ID">Idaho</option><option value="IL">Illinois</option><option value="IN">Indiana</option>
+          <option value="IA">Iowa</option><option value="KS">Kansas</option><option value="KY">Kentucky</option>
+          <option value="LA">Louisiana</option><option value="ME">Maine</option><option value="MD">Maryland</option>
+          <option value="MA">Massachusetts</option><option value="MI">Michigan</option><option value="MN">Minnesota</option>
+          <option value="MS">Mississippi</option><option value="MO">Missouri</option><option value="MT">Montana</option>
+          <option value="NE">Nebraska</option><option value="NV">Nevada</option><option value="NH">New Hampshire</option>
+          <option value="NJ">New Jersey</option><option value="NM">New Mexico</option><option value="NY">New York</option>
+          <option value="NC">North Carolina</option><option value="ND">North Dakota</option><option value="OH">Ohio</option>
+          <option value="OK">Oklahoma</option><option value="OR">Oregon</option><option value="PA">Pennsylvania</option>
+          <option value="RI">Rhode Island</option><option value="SC">South Carolina</option><option value="SD">South Dakota</option>
+          <option value="TN">Tennessee</option><option value="TX">Texas</option><option value="UT">Utah</option>
+          <option value="VT">Vermont</option><option value="VA">Virginia</option><option value="WA">Washington</option>
+          <option value="WV">West Virginia</option><option value="WI">Wisconsin</option><option value="WY">Wyoming</option>
+        </select>
+      </div>
+      <div class="col-4">
+        <label for="zip">ZIP</label>
+        <input id="zip" name="zip">
+      </div>
+      <div class="col-6">
+        <label for="governing_state">Governing State (if different)</label>
+        <input id="governing_state" name="governing_state" placeholder="Defaults to Address State">
+      </div>
+      <div class="col-6">
+        <label for="preferred_deadline">Preferred Deadline</label>
+        <input id="preferred_deadline" name="preferred_deadline" type="date">
+      </div>
 
-        <div>
-          <label for="email" class="block">Email</label>
-          <input id="email" name="email" type="email" required/>
-        </div>
-        <div>
-          <label for="phone" class="block">Phone (optional)</label>
-          <input id="phone" name="phone" type="tel" />
-        </div>
+      <div class="col-6">
+        <label for="doc_type">Document Type</label>
+        <select id="doc_type" name="doc_type" required>
+          <option value="">Choose…</option>
+          <option value="LLC">LLC Formation</option>
+          <option value="Partnership">Partnership Agreement</option>
+          <option value="NDA">Non‑Disclosure Agreement</option>
+          <option value="Operating Agreement">Operating Agreement</option>
+          <option value="Independent Contractor">Independent Contractor Agreement</option>
+        </select>
+      </div>
+      <div class="col-6">
+        <label for="urgency">Urgency</label>
+        <select id="urgency" name="urgency">
+          <option value="">Choose…</option>
+          <option value="normal">Normal (2–3 days)</option>
+          <option value="rush">Rush (24 hours)</option>
+        </select>
+      </div>
+      <div class="col-12">
+        <label for="details">Details (key facts, special terms)</label>
+        <textarea id="details" name="details" placeholder="Anything we should know to draft accurately…"></textarea>
+      </div>
 
-        <div class="full section-title"><strong>Business / Address</strong></div>
+      <div class="col-12 fieldset">
+        <label class="pill">Parties (add up to 4)</label>
+      </div>
+      <div class="col-6">
+        <label for="party1_name">Party 1 Name</label>
+        <input id="party1_name" name="party1_name">
+      </div>
+      <div class="col-3">
+        <label for="party1_role">Role</label>
+        <input id="party1_role" name="party1_role" placeholder="Member, Partner, Disclosing…">
+      </div>
+      <div class="col-3">
+        <label for="party1_email">Email (optional)</label>
+        <input id="party1_email" name="party1_email" type="email">
+      </div>
 
-        <div class="full">
-          <label for="business_name" class="block">Business / Entity Name (optional)</label>
-          <input id="business_name" name="business_name" type="text"/>
-        </div>
+      <div class="col-6">
+        <label for="party2_name">Party 2 Name</label>
+        <input id="party2_name" name="party2_name">
+      </div>
+      <div class="col-3">
+        <label for="party2_role">Role</label>
+        <input id="party2_role" name="party2_role">
+      </div>
+      <div class="col-3">
+        <label for="party2_email">Email (optional)</label>
+        <input id="party2_email" name="party2_email" type="email">
+      </div>
 
-        <div>
-          <label for="street" class="block">Street</label>
-          <input id="street" name="street" type="text" />
-        </div>
-        <div>
-          <label for="city" class="block">City</label>
-          <input id="city" name="city" type="text" />
-        </div>
+      <div class="col-6">
+        <label for="party3_name">Party 3 Name</label>
+        <input id="party3_name" name="party3_name">
+      </div>
+      <div class="col-3">
+        <label for="party3_role">Role</label>
+        <input id="party3_role" name="party3_role">
+      </div>
+      <div class="col-3">
+        <label for="party3_email">Email (optional)</label>
+        <input id="party3_email" name="party3_email" type="email">
+      </div>
 
-        <div>
-          <label for="state" class="block">State</label>
-          <select id="state" name="state">
-            <option value="">Select…</option>
-            <option value="AL">Alabama</option><option value="AK">Alaska</option><option value="AZ">Arizona</option>
-            <option value="AR">Arkansas</option><option value="CA">California</option><option value="CO">Colorado</option>
-            <option value="CT">Connecticut</option><option value="DE">Delaware</option><option value="DC">District of Columbia</option>
-            <option value="FL">Florida</option><option value="GA">Georgia</option><option value="HI">Hawaii</option>
-            <option value="ID">Idaho</option><option value="IL">Illinois</option><option value="IN">Indiana</option>
-            <option value="IA">Iowa</option><option value="KS">Kansas</option><option value="KY">Kentucky</option>
-            <option value="LA">Louisiana</option><option value="ME">Maine</option><option value="MD">Maryland</option>
-            <option value="MA">Massachusetts</option><option value="MI">Michigan</option><option value="MN">Minnesota</option>
-            <option value="MS">Mississippi</option><option value="MO">Missouri</option><option value="MT">Montana</option>
-            <option value="NE">Nebraska</option><option value="NV">Nevada</option><option value="NH">New Hampshire</option>
-            <option value="NJ">New Jersey</option><option value="NM">New Mexico</option><option value="NY">New York</option>
-            <option value="NC">North Carolina</option><option value="ND">North Dakota</option><option value="OH">Ohio</option>
-            <option value="OK">Oklahoma</option><option value="OR">Oregon</option><option value="PA">Pennsylvania</option>
-            <option value="RI">Rhode Island</option><option value="SC">South Carolina</option><option value="SD">South Dakota</option>
-            <option value="TN">Tennessee</option><option value="TX">Texas</option><option value="UT">Utah</option>
-            <option value="VT">Vermont</option><option value="VA">Virginia</option><option value="WA">Washington</option>
-            <option value="WV">West Virginia</option><option value="WI">Wisconsin</option><option value="WY">Wyoming</option>
-          </select>
-        </div>
-        <div>
-          <label for="zip" class="block">ZIP</label>
-          <input id="zip" name="zip" type="text" />
-        </div>
+      <div class="col-6">
+        <label for="party4_name">Party 4 Name</label>
+        <input id="party4_name" name="party4_name">
+      </div>
+      <div class="col-3">
+        <label for="party4_role">Role</label>
+        <input id="party4_role" name="party4_role">
+      </div>
+      <div class="col-3">
+        <label for="party4_email">Email (optional)</label>
+        <input id="party4_email" name="party4_email" type="email">
+      </div>
 
-        <div>
-          <label for="governing_state" class="block">Governing State (if different)</label>
-          <input id="governing_state" name="governing_state" type="text" placeholder="Defaults to Address State"/>
-        </div>
-        <div>
-          <label for="preferred_deadline" class="block">Preferred Deadline</label>
-          <input id="preferred_deadline" name="preferred_deadline" type="date" />
-        </div>
-
-        <div>
-          <label for="doc_type" class="block">What do you need? (Document Type)</label>
-          <input id="doc_type" name="doc_type" type="text" placeholder="e.g., LLC Operating Agreement" />
-        </div>
-        <div>
-          <label for="urgency" class="block">Urgency</label>
-          <select id="urgency" name="urgency">
-            <option value="">Choose…</option>
-            <option value="normal">Normal (2–3 days)</option>
-            <option value="rush">Rush (24 hours)</option>
-          </select>
-        </div>
-
-        <div class="full">
-          <label for="details" class="block">Details (key facts, special terms)</label>
-          <textarea id="details" name="details" placeholder="Anything we should know to draft accurately…"></textarea>
-        </div>
-
-        <div class="full section-title"><strong>Parties (add up to 4)</strong></div>
-
-        <div>
-          <label for="party1_name" class="block">Party 1 Name</label>
-          <input id="party1_name" name="party1_name" type="text" />
-        </div>
-        <div>
-          <label for="party1_role" class="block">Role</label>
-          <input id="party1_role" name="party1_role" type="text" placeholder="Member, Partner, Disclosing…" />
-        </div>
-        <div>
-          <label for="party1_email" class="block">Email (optional)</label>
-          <input id="party1_email" name="party1_email" type="email" />
-        </div>
-        <div></div>
-
-        <div>
-          <label for="party2_name" class="block">Party 2 Name</label>
-          <input id="party2_name" name="party2_name" type="text" />
-        </div>
-        <div>
-          <label for="party2_role" class="block">Role</label>
-          <input id="party2_role" name="party2_role" type="text" />
-        </div>
-        <div>
-          <label for="party2_email" class="block">Email (optional)</label>
-          <input id="party2_email" name="party2_email" type="email" />
-        </div>
-        <div></div>
-
-        <div>
-          <label for="party3_name" class="block">Party 3 Name</label>
-          <input id="party3_name" name="party3_name" type="text" />
-        </div>
-        <div>
-          <label for="party3_role" class="block">Role</label>
-          <input id="party3_role" name="party3_role" type="text" />
-        </div>
-        <div>
-          <label for="party3_email" class="block">Email (optional)</label>
-          <input id="party3_email" name="party3_email" type="email" />
-        </div>
-        <div></div>
-
-        <div>
-          <label for="party4_name" class="block">Party 4 Name</label>
-          <input id="party4_name" name="party4_name" type="text" />
-        </div>
-        <div>
-          <label for="party4_role" class="block">Role</label>
-          <input id="party4_role" name="party4_role" type="text" />
-        </div>
-        <div>
-          <label for="party4_email" class="block">Email (optional)</label>
-          <input id="party4_email" name="party4_email" type="email" />
-        </div>
-        <div></div>
-
-        <div class="full section-title"><strong>How do you want to file?</strong></div>
-        <div class="full radio-row">
-          <label><input type="radio" name="file_option" value="self" checked/> I will download, sign, and file myself. <span class="muted">(No service charge)</span></label>
-          <label><input type="radio" name="file_option" value="efile"/> Please have eLegalBoom file for me. <span class="muted">(Service fee TBD)</span></label>
-        </div>
-
-        <div class="full disclaimer">
-          <div class="checkline">
-            <input id="legal_ack" type="checkbox" required/>
-            <label for="legal_ack">I understand eLegalBoom provides AI‑assisted document preparation with human QC and is not a law firm, nor does it provide legal advice.</label>
-          </div>
-        </div>
-
-        <div class="full actions">
-          <button id="submitBtn" type="submit">Submit Request</button>
+      <div class="col-12 fieldset">
+        <label class="pill">How do you want to file?</label>
+        <div class="radio-row">
+          <label><input type="radio" name="file_option" value="self"> I will download, sign, and file myself. <span class="muted">(No service charge)</span></label>
+          <label><input type="radio" name="file_option" value="efile"> Please have eLegalBoom file for me. <span class="muted">(Service fee TBD)</span></label>
         </div>
       </div>
+
+      <div class="col-12 center">
+        <label class="row" style="gap:10px;">
+          <input id="disclaimer" type="checkbox" required>
+          <span class="muted">I understand eLegalBoom provides AI‑assisted document preparation with human QC and is not a law firm, nor does it provide legal advice.</span>
+        </label>
+      </div>
+
+      <div class="col-12">
+        <button class="btn" type="submit">Submit Request</button>
+      </div>
+      <div class="col-12 footer-note" id="statusNote"></div>
     </form>
   </div>
 
+  <!-- Supabase client -->
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
-    // Supabase configuration (baked in)
+    // === CONFIG (pre-filled with your values) ===
     const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const { createClient } = supabase;
-    const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // show hint only if missing
+    document.getElementById('configHint').style.display = (SUPABASE_URL && SUPABASE_ANON_KEY) ? 'none' : 'inline-block';
 
-    // Show hint if config is missing (defensive)
-    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-      document.getElementById('configHint').style.display = 'inline-block';
-    }
+    // default governing_state to state on blur if empty
+    const stateEl = document.getElementById('state');
+    const govStateEl = document.getElementById('governing_state');
+    stateEl.addEventListener('change', () => { if (!govStateEl.value) govStateEl.value = stateEl.value; });
 
-    function uid() {
-      // Simple readable order id: ELB-YYYYMMDD-HHmmss-XXXX
-      const d = new Date();
-      const pad = (n)=> String(n).padStart(2,'0');
-      const stamp = d.getFullYear() + pad(d.getMonth()+1) + pad(d.getDate()) + "-" + pad(d.getHours()) + pad(d.getMinutes()) + pad(d.getSeconds());
-      const rand = Math.random().toString(36).slice(2,6).toUpperCase();
-      return `ELB-${stamp}-${rand}`;
-    }
-
-    document.getElementById('requestForm').addEventListener('submit', async (e) => {
+    document.getElementById('intakeForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const btn = document.getElementById('submitBtn');
-      btn.disabled = true;
+      const form = e.target;
+      const fd = new FormData(form);
+      // ensure a value exists for file_option
+      if (!fd.get('file_option')) fd.set('file_option', '');
 
-      try {
-        const formData = new FormData(e.target);
-        const data = Object.fromEntries(formData.entries());
+      // Build payload matching your Supabase schema (exclude id/created_at which are auto)
+      const payload = Object.fromEntries(fd.entries());
 
-        data.created_at = new Date().toISOString();
-        data.order_id = uid();
-        if (!data.governing_state) data.governing_state = data.state || "";
+      // Insert & return the generated row (including id)
+      const { data, error } = await supabase.from('requests').insert([payload]).select().single();
 
-        // Insert into Supabase
-        const { error } = await sb.from('requests').insert([data]);
-        if (error) {
-          alert("Error submitting request: " + error.message);
-          btn.disabled = false;
-          return;
-        }
-
-        alert("Thank you — your order number is " + data.order_id);
-        e.target.reset();
-        btn.disabled = false;
-      } catch (err) {
-        alert("Unexpected error: " + (err?.message || err));
-        btn.disabled = false;
+      const note = document.getElementById('statusNote');
+      if (error) {
+        alert("Error submitting request: " + error.message);
+        console.error(error);
+      } else {
+        note.textContent = "Thanks! Your request was submitted. Ticket #" + data.id + " • saved at " + new Date(data.created_at).toLocaleString();
+        form.reset();
+        // keep governing state default behavior
+        govStateEl.value = "";
       }
     });
   </script>
