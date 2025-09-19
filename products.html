@@ -3,52 +3,44 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>ElegalBoom — Products</title>
+  <title>ElegalBoom — Choose Products</title>
   <link rel="stylesheet" href="/styles.css"/>
   <script src="https://js.stripe.com/v3/"></script>
   <script src="/config.js"></script>
+  <!-- Optional Supabase (for ranking) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <style>
+    .chooser{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    @media (max-width:900px){.chooser{grid-template-columns:1fr}}
+    .opt{display:flex;align-items:center;gap:12px;border:1px solid #e6eaf1;background:#fff;border-radius:14px;padding:14px}
+    .name{font-weight:800}
+    .price{font-weight:800}
+    .right{margin-left:auto;text-align:right}
+    .sum{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding:14px;border:1px dashed #cfd6e3;border-radius:12px;background:#f7f9fc}
+    .muted{color:#6b7280}
+  </style>
 </head>
 <body>
   <div class="wrap">
     <div class="hdr">
-      <h1 style="margin:0">Products</h1>
+      <h1 style="margin:0">Select Your Documents</h1>
       <a class="btn" href="/index.html">Home</a>
     </div>
 
     <div class="card">
-      <p class="muted">Prices shown here are labels; the actual charge always comes from the Stripe Price ID for each product.</p>
+      <p class="muted">Pick one or more. We’ll show these same prices again in secure Stripe Checkout.</p>
       <div id="status" class="muted" style="margin:8px 0 12px">Checking Stripe config…</div>
-      <div class="grid">
-        <div class="item">
-          <div class="name">Work‑for‑Hire Agreement</div>
-          <div class="price">$79</div>
-          <button class="btn" onclick="buy('WORK_FOR_HIRE')">Buy Now</button>
-        </div>
-        <div class="item">
-          <div class="name">LegalBoom Document Bundle</div>
-          <div class="price">$449</div>
-          <button class="btn" onclick="buy('BUNDLE')">Buy Now</button>
-        </div>
-        <div class="item">
-          <div class="name">Expedited Processing</div>
-          <div class="price">$79</div>
-          <button class="btn" onclick="buy('EXPEDITED')">Buy Now</button>
-        </div>
-        <div class="item">
-          <div class="name">Non‑Disclosure Agreement (NDA)</div>
-          <div class="price">$49</div>
-          <button class="btn" onclick="buy('NDA')">Buy Now</button>
-        </div>
-        <div class="item">
-          <div class="name">Partnership Agreement</div>
-          <div class="price">$199</div>
-          <button class="btn" onclick="buy('PARTNERSHIP')">Buy Now</button>
-        </div>
-        <div class="item">
-          <div class="name">LLC Formation</div>
-          <div class="price">$299</div>
-          <button class="btn" onclick="buy('LLC')">Buy Now</button>
-        </div>
+
+      <div id="chooser" class="chooser"></div>
+
+      <div class="sum">
+        <div><strong>Estimated total</strong> <span class="muted">(display only; final charge comes from Stripe)</span></div>
+        <div id="total" class="price">$0</div>
+      </div>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px">
+        <a class="btn" href="/intake.html" style="background:#111827">Start Intake First</a>
+        <button class="btn" id="buy">Buy Selected</button>
       </div>
     </div>
 
@@ -56,26 +48,108 @@
   </div>
 
 <script>
-  const statusEl = document.getElementById('status');
-  const ready = typeof STRIPE_PUBLISHABLE_KEY === 'string' && STRIPE_PUBLISHABLE_KEY.startsWith('pk_');
-  const missing = Object.values(PRICE_IDS).some(v => !v || v.startsWith('price_xxx'));
-  statusEl.textContent = ready ? (missing ? 'Stripe config: add your Price IDs in config.js' : 'Stripe config: OK') : 'Stripe config: add your publishable key in config.js';
+// ---------- Config for optional Supabase ranking ----------
+const SUPABASE_URL  = window.SUPABASE_URL  || '';   // e.g. 'https://xxx.supabase.co'
+const SUPABASE_ANON = window.SUPABASE_ANON || '';   // anon public key
+let supabaseClient = null;
+if(SUPABASE_URL && SUPABASE_ANON){
+  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+}
 
-  const stripe = ready ? Stripe(STRIPE_PUBLISHABLE_KEY) : null;
+// ---------- Product Catalog (display labels & default order) ----------
+const CATALOG = [
+  {key:'PARTNERSHIP', name:'Partnership Agreement', price:199, blurb:'Define roles and ownership'},
+  {key:'LLC', name:'LLC Formation', price:299, blurb:'State‑aware LLC formation package'},
+  {key:'WORK_FOR_HIRE', name:'Work‑for‑Hire Agreement', price:79, blurb:'Standard engagement for contractors'},
+  {key:'BUNDLE', name:'LegalBoom Document Bundle', price:449, blurb:'Our most popular set'},
+  {key:'EXPEDITED', name:'Expedited Processing', price:79, blurb:'Priority processing by our system'},
+  {key:'NDA', name:'Non‑Disclosure Agreement (NDA)', price:49, blurb:'Mutual confidentiality agreement'},
+];
 
-  async function buy(which){
-    if(!stripe){ alert('Add your Stripe publishable key in config.js'); return; }
-    const price = PRICE_IDS[which];
-    if(!price || price.startsWith('price_xxx')){ alert('Add the Stripe Price ID for '+which+' in config.js'); return; }
+// ---------- Stripe readiness status ----------
+const statusEl = document.getElementById('status');
+const ready = typeof STRIPE_PUBLISHABLE_KEY === 'string' && STRIPE_PUBLISHABLE_KEY.startsWith('pk_');
+const missing = Object.values(PRICE_IDS).some(v => !v || v.startsWith('price_xxx'));
+statusEl.textContent = ready ? (missing ? 'Stripe config: add your Price IDs in config.js' : 'Stripe config: OK') : 'Stripe config: add your publishable key in config.js';
+const stripe = ready ? Stripe(STRIPE_PUBLISHABLE_KEY) : null;
+
+// ---------- Render grid (rank by Supabase stats if available) ----------
+async function fetchRanking(){
+  if(!supabaseClient) return null;
+  const { data, error } = await supabaseClient.from('product_stats').select('key, clicks, purchases');
+  if(error){ return null; }
+  return data;
+}
+function dollars(n){ return '$' + n.toString(); }
+
+async function render(){
+  const stats = await fetchRanking();
+  let items = [...CATALOG];
+  if(stats && stats.length){
+    const counts = Object.fromEntries(stats.map(r=>[r.key, (r.purchases||0)*100 + (r.clicks||0)]));
+    items.sort((a,b)=>(counts[b.key]||0)-(counts[a.key]||0));
+  }
+  const wrap = document.getElementById('chooser');
+  wrap.innerHTML = '';
+  for(const it of items){
+    const div = document.createElement('label');
+    div.className = 'opt';
+    div.innerHTML = `
+      <input type="checkbox" data-key="${it.key}" data-amount="${it.price}"/>
+      <div><div class="name">${it.name}</div><div class="muted">${it.blurb}</div></div>
+      <div class="right"><div class="price">${dollars(it.price)}</div></div>
+    `;
+    wrap.appendChild(div);
+  }
+  bindTotalHandlers();
+}
+function bindTotalHandlers(){
+  function refreshTotal(){
+    let sum = 0;
+    document.querySelectorAll('input[type=checkbox][data-amount]').forEach(cb=>{
+      if(cb.checked){ sum += Number(cb.getAttribute('data-amount')||0); }
+    });
+    document.getElementById('total').textContent = '$' + sum;
+  }
+  document.querySelectorAll('input[type=checkbox]').forEach(cb=>cb.addEventListener('change', refreshTotal));
+  refreshTotal();
+}
+render();
+
+// ---------- Buy Selected (multi-line checkout) ----------
+document.getElementById('buy').onclick = async () => {
+  if(!stripe){ alert('Add your Stripe publishable key in config.js'); return; }
+  const selected = Array.from(document.querySelectorAll('input[type=checkbox]')).filter(cb=>cb.checked).map(cb=>cb.getAttribute('data-key'));
+  if(selected.length===0){ alert('Select at least one item.'); return; }
+
+  // Optional: record click intent for ranking (non-blocking)
+  if(supabaseClient){
+    try{
+      await Promise.all(selected.map(key => 
+        supabaseClient.from('product_stats').upsert({key, clicks: 1}, {onConflict:'key'}).select()
+      ));
+    }catch(e){/* ignore */}
+  }
+
+  const lineItems = selected.map(key => {
+    const price = PRICE_IDS[key];
+    if(!price || price.startsWith('price_xxx')){
+      alert('Missing Price ID for ' + key + ' in config.js'); throw new Error('Missing price');
+    }
+    return { price, quantity: 1 };
+  });
+  try {
     const {error} = await stripe.redirectToCheckout({
-      lineItems: [{ price, quantity: 1 }],
+      lineItems,
       mode: 'payment',
       successUrl: window.location.origin + '/success.html',
       cancelUrl: window.location.origin + '/cancel.html',
     });
     if(error){ alert(error.message); }
-  }
-  document.getElementById('y').textContent = new Date().getFullYear();
+  } catch(e){ /* handled */ }
+};
+
+document.getElementById('y').textContent=new Date().getFullYear();
 </script>
 </body>
 </html>
