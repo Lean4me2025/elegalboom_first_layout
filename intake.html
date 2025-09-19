@@ -1,93 +1,32 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>LLC Formation — Intake</title>
-  <style>
-    body{font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto; background:#f7f9fc; color:#0b132b; margin:0}
-    .wrap{max-width:900px;margin:0 auto;padding:28px}
-    .card{background:#fff;border-radius:16px;box-shadow:0 10px 24px rgba(0,0,0,.08);padding:26px;margin:18px 0}
-    .progress{height:8px;background:#e6e8ee;border-radius:999px;overflow:hidden;margin:8px 0 18px}
-    .bar{height:100%;background:#0a66c2;width:25%;transition:width .3s ease}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-    @media (max-width:900px){ .grid{grid-template-columns:1fr} }
-    label{font-weight:600;display:block;margin:6px 0 4px}
-    input,select,textarea{width:100%;padding:12px;border:1px solid #d6d8df;border-radius:10px}
-    input:focus,select:focus,textarea:focus{outline:none;border-color:#0a66c2;box-shadow:0 0 0 3px rgba(10,102,194,.12)}
-    .btnRow{display:flex;gap:10px;justify-content:flex-end;margin-top:12px}
-    .btn{border:0;border-radius:12px;padding:12px 18px;cursor:pointer;font-weight:800}
-    .btn.secondary{background:#eef2f7;color:#0b132b}
-    .btn.primary{background:#0a66c2;color:#fff}
-    .kv{display:grid;grid-template-columns:220px 1fr;gap:10px}
-    @media (max-width:900px){ .kv{grid-template-columns:1fr} }
-    .kv .k{font-weight:700;background:#f9fafb;border:1px solid #e5e7eb;padding:8px 10px;border-radius:10px}
-    .kv .v{border:1px solid #e5e7eb;padding:8px 10px;border-radius:10px;background:#fff}
-  </style>
-</head>
-<body>
-  <div class="wrap">
-    <h1>LLC Formation — Intake</h1>
-    <div class="card">
-      <div class="progress"><div class="bar" id="bar"></div></div>
-      <section id="step1">
-        <h3>Company Basics</h3>
-        <div class="grid">
-          <div><label>LLC Name<input name="llc_name" required></label></div>
-          <div><label>Formation State<select name="state" id="state" required>
-            <option value="">Select…</option><option>TX</option><option>CA</option><option>PA</option><option>OH</option>
-          </select></label></div>
-          <div style="grid-column:1/-1"><label>Principal Office Address<textarea name="principal_address" rows="2" required></textarea></label></div>
-          <div><label>Registered Agent Name<input name="registered_agent_name" required></label></div>
-          <div><label>Registered Agent Address<textarea name="registered_agent_address" rows="2" required></textarea></label></div>
-          <div><label>Organizer Name<input name="organizer_name" required></label></div>
-          <div><label>Organizer Address<textarea name="organizer_address" rows="2" required></textarea></label></div>
-          <div><label>Effective Date<input type="date" name="effective_date" required></label></div>
-          <div><label>Management Structure<select name="management_type" required>
-            <option value="">Select…</option><option>MEMBER-MANAGED</option><option>MANAGER-MANAGED</option>
-          </select></label></div>
-        </div>
-        <div class="btnRow"><button class="btn primary" id="to2">Next: Members</button></div>
-      </section>
-      <section id="step2" style="display:none">
-        <h3>Members / Managers</h3>
-        <div class="grid">
-          <div><label>Member 1 Name<input name="member1_name" required></label></div>
-          <div><label>Member 1 Ownership %<input type="number" name="member1_pct" min="0" max="100" required></label></div>
-          <div><label>Member 2 Name<input name="member2_name"></label></div>
-          <div><label>Member 2 Ownership %<input type="number" name="member2_pct" min="0" max="100"></label></div>
-        </div>
-        <div class="btnRow"><button class="btn secondary" id="back1">Back</button><button class="btn primary" id="to3">Next: State Requirements</button></div>
-      </section>
-      <section id="step3" style="display:none">
-        <h3>Additional State Requirements</h3>
-        <div id="extras"></div>
-        <p id="notes" style="color:#6b7280"></p>
-        <div class="btnRow"><button class="btn secondary" id="back2">Back</button><button class="btn primary" id="review">Review & Continue</button></div>
-      </section>
-      <section id="step4" style="display:none">
-        <h3>Review</h3>
-        <div id="reviewGrid" class="kv"></div>
-        <div class="btnRow"><button class="btn secondary" id="back3">Back</button><button class="btn primary" id="checkout">Continue to Checkout</button></div>
-      </section>
-    </div>
-  </div>
-
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Provide Your Information — ElegalBoom</title><link rel="stylesheet" href="/styles.css"/></head>
+<body><div class="wrap"><div class="hdr"><div><div class="breadcrumb">Products → Provide Your Information</div><h1 style="margin:0">Your Information</h1></div><a class="btn" href="/products.html">Back to Products</a></div>
+<div id="selectionBadges" class="card" style="margin-bottom:12px"></div>
+<div class="card"><div id="formMount"></div><hr class="sep"/><div class="actions"><a class="btn" href="/products.html">Back</a><a class="btn primary" id="toCheckout">Purchase</a></div></div>
+<div class="footer">&copy; <span id="y"></span> ElegalBoom</div></div>
+<script src="https://js.stripe.com/v3/"></script><script src="/config.js"></script>
 <script>
-const bar=document.getElementById('bar'); function setProgress(n){ bar.style.width=(n*25)+'%'; }
-const step1=document.getElementById('step1'); const step2=document.getElementById('step2'); const step3=document.getElementById('step3'); const step4=document.getElementById('step4');
-function validate(section){ const fields=section.querySelectorAll('input,select,textarea'); for(const el of fields){ if(section.style.display==='none') continue; if(!el.checkValidity()){ el.reportValidity(); el.focus(); return false; } } return true; }
-function collect(){ const d={}; document.querySelectorAll('input,select,textarea').forEach(el=>{ if(!el.name) return; if(el.closest('#step3') && step3.style.display==='none') return; d[el.name]=el.value; }); return d; }
-function renderReview(d){ const g=document.getElementById('reviewGrid'); g.innerHTML=''; for(const [k,v] of Object.entries(d)){ const kdiv=document.createElement('div'); kdiv.className='k'; kdiv.textContent=k.replace(/_/g,' ').replace(/\b\w/g,s=>s.toUpperCase()); const vdiv=document.createElement('div'); vdiv.className='v'; vdiv.textContent=v||'—'; g.appendChild(kdiv); g.appendChild(vdiv);} }
-document.getElementById('to2').onclick=()=>{ if(!validate(step1)) return; step1.style.display='none'; step2.style.display='block'; setProgress(2); window.scrollTo(0,0); };
-document.getElementById('back1').onclick=()=>{ step2.style.display='none'; step1.style.display='block'; setProgress(1); window.scrollTo(0,0); };
-document.getElementById('to3').onclick=()=>{ if(!validate(step2)) return; step2.style.display='none'; step3.style.display='block'; setProgress(3); renderExtras(); window.scrollTo(0,0); };
-document.getElementById('back2').onclick=()=>{ step3.style.display='none'; step2.style.display='block'; setProgress(2); window.scrollTo(0,0); };
-document.getElementById('review').onclick=()=>{ if(!validate(step3)) return; const d=collect(); renderReview(d); step3.style.display='none'; step4.style.display='block'; setProgress(4); window.scrollTo(0,0); };
-document.getElementById('back3').onclick=()=>{ step4.style.display='none'; step3.style.display='block'; setProgress(3); window.scrollTo(0,0); };
-async function renderExtras(){ const extras=document.getElementById('extras'); const notes=document.getElementById('notes'); extras.innerHTML=''; notes.textContent=''; try{ const res=await fetch('/config/state_overrides.json'); if(!res.ok) throw 0; const cfg=await res.json(); const st=(document.getElementById('state').value||'').toUpperCase(); const c=cfg[st]; if(!c){ notes.textContent='No additional questions required for your state.'; return; } (c.extraFields||[]).forEach(f=>{ const wrap=document.createElement('div'); wrap.style.margin='10px 0'; const lab=document.createElement('label'); lab.textContent=f.label+(f.required?' *':''); lab.style.display='block'; lab.style.fontWeight='600'; lab.style.margin='6px 0'; let input; if(f.type==='textarea'){ input=document.createElement('textarea'); input.rows=2; } else if(f.type==='select'){ input=document.createElement('select'); input.appendChild(new Option('Select…','')); (f.options||[]).forEach(o=>input.appendChild(new Option(o,o))); } else { input=document.createElement('input'); input.type=f.type||'text'; if(f.min!==undefined) input.min=f.min; if(f.max!==undefined) input.max=f.max; if(f.pattern) input.pattern=f.pattern; } input.name=f.id; if(f.required) input.required=true; wrap.appendChild(lab); wrap.appendChild(input); extras.appendChild(wrap); }); if(c.notes) notes.textContent=c.notes; }catch(e){ notes.textContent=''; } }
-document.getElementById('checkout').onclick=()=>{ window.location.href='/success.html?v=1'; };
-setProgress(1);
-</script>
-</body>
-</html>
+const formMount=document.getElementById('formMount');const badges=document.getElementById('selectionBadges');const selected=JSON.parse(localStorage.getItem('eb_selected')||'[]');
+if(!selected.length){formMount.innerHTML='<p class="muted">No products selected. <a href="/products.html">Choose products first</a>.</p>';}
+else{
+  const names={PARTNERSHIP:'Partnership Agreement',LLC:'LLC Formation',WORK_FOR_HIRE:'Work‑for‑Hire Agreement',BUNDLE:'LegalBoom Document Bundle',EXPEDITED:'Expedited Processing',NDA:'Non‑Disclosure Agreement (NDA)'};
+  const wrap=document.createElement('div');selected.forEach(k=>{const b=document.createElement('span');b.className='badge';b.textContent=names[k]||k;wrap.appendChild(b);});badges.innerHTML='<strong>Selected:</strong> ';badges.appendChild(wrap);
+  const schemas={
+    LLC:[['LLC Name','text','llc_name'],['Formation State','select','state',['California','Texas','Pennsylvania','Ohio']],['Principal Office Address','text','principal_address'],['Registered Agent Name','text','ra_name'],['Registered Agent Address','text','ra_address'],['Organizer Name','text','org_name'],['Organizer Address','text','org_address'],['Effective Date','date','effective_date'],['Management Structure','select','mgmt',['Member‑Managed','Manager‑Managed']]],
+    PARTNERSHIP:[['Partnership Name','text','partnership_name'],['Governing State','select','p_state',['California','Texas','Pennsylvania','Ohio']],['Partner #1 Name','text','p1_name'],['Partner #1 Address','text','p1_addr'],['Partner #1 Ownership %','number','p1_pct'],['Partner #2 Name','text','p2_name'],['Partner #2 Address','text','p2_addr'],['Partner #2 Ownership %','number','p2_pct'],['Effective Date','date','p_effective']],
+    WORK_FOR_HIRE:[['Company/Client Name','text','client_name'],['Contractor Name','text','contractor_name'],['Project/Work Description','textarea','work_desc'],['Effective Date','date','wfh_effective'],['Payment/Consideration','text','wfh_payment']],
+    NDA:[['Party A Name','text','nda_a'],['Party A Address','text','nda_a_addr'],['Party B Name','text','nda_b'],['Party B Address','text','nda_b_addr'],['Term (months)','number','nda_term'],['Effective Date','date','nda_effective']],
+    EXPEDITED:[['Preferred Delivery Timeframe','select','exp_speed',['Same Day','24 Hours','48 Hours']],['Notes (optional)','textarea','exp_notes']],
+    BUNDLE:[['Primary Contact Name','text','bundle_contact'],['Primary Email','text','bundle_email'],['Company/Organization','text','bundle_company']]
+  };
+  const titleMap={LLC:'LLC Formation',PARTNERSHIP:'Partnership Agreement',WORK_FOR_HIRE:'Work‑for‑Hire Agreement',BUNDLE:'LegalBoom Document Bundle',EXPEDITED:'Expedited Processing',NDA:'Non‑Disclosure Agreement (NDA)'};
+  selected.forEach(key=>{const section=document.createElement('section');section.className='section';section.innerHTML='<h2>'+ (titleMap[key]||key) +'</h2>';const grid=document.createElement('div');grid.className='form-grid';
+    (schemas[key]||[]).forEach(def=>{const [label,type,name,opts]=def;const cell=document.createElement('div');const id='f_'+name;if(type==='select'){const options=(opts||[]).map(o=>'<option>'+o+'</option>').join('');cell.innerHTML='<label for="'+id+'">'+label+'</label><select id="'+id+'" name="'+name+'"><option value="">Select…</option>'+options+'</select>';}
+    else if(type==='textarea'){cell.innerHTML='<label for="'+id+'">'+label+'</label><textarea id="'+id+'" name="'+name+'" rows="4"></textarea>';}
+    else{const itype=(type==='number'||type==='date')?type:'text';cell.innerHTML='<label for="'+id+'">'+label+'</label><input id="'+id+'" name="'+name+'" type="'+itype+'"/>';}grid.appendChild(cell);});
+    section.appendChild(grid);formMount.appendChild(section);formMount.appendChild(document.createElement('hr')).className='sep';});
+}
+document.getElementById('toCheckout').onclick=async()=>{const ready=typeof STRIPE_PUBLISHABLE_KEY==='string'&&STRIPE_PUBLISHABLE_KEY.startsWith('pk_');if(!ready){alert('Add your Stripe publishable key in config.js');return;}const stripe=Stripe(STRIPE_PUBLISHABLE_KEY);const sel=JSON.parse(localStorage.getItem('eb_selected')||'[]');if(sel.length===0){alert('No products selected.');return;}const lineItems=sel.map(k=>{const price=PRICE_IDS[k];if(!price||price.startsWith('price_xxx')){alert('Missing Price ID for '+k+' in config.js');throw new Error('missing');}return {price,quantity:1};});const {error}=await stripe.redirectToCheckout({lineItems,mode:'payment',successUrl:window.location.origin+'/success.html',cancelUrl:window.location.origin+'/cancel.html'});if(error){alert(error.message);}}
+document.getElementById('y').textContent=new Date().getFullYear();
+</script></body></html>
