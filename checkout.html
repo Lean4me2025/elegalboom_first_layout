@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>ElegalBoom — Stripe Test Checkout</title>
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:#f7f9fc;color:#0b132b;margin:0}
+    .wrap{max-width:900px;margin:0 auto;padding:28px}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    @media (max-width:800px){.grid{grid-template-columns:1fr}}
+    .card{background:#fff;border-radius:14px;box-shadow:0 10px 24px rgba(0,0,0,.08);padding:18px}
+    .price{font-weight:800}
+    button{background:#0a66c2;color:#fff;border:0;border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer}
+    header a{color:#0a66c2;text-decoration:none;font-weight:700}
+    code{background:#f0f3f8;padding:2px 6px;border-radius:6px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header><a href="/index.html">← Back to Home</a></header>
+    <h1>Stripe Test Checkout</h1>
+    <p>Use Stripe test card <code>4242 4242 4242 4242</code>, any future expiry, any CVC + ZIP.</p>
+
+    <div class="card">
+      <p><strong>Status:</strong> <span id="status">Not configured</span></p>
+      <p>Edit <code>config.js</code> at the repo root. Set your <em>test</em> publishable key and <em>test</em> price IDs.</p>
+    </div>
+
+    <div class="grid" style="margin-top:16px">
+      <div class="card">
+        <h3>LLC Formation</h3>
+        <p class="price">$99 one‑time</p>
+        <button onclick="buy('LLC')">Checkout</button>
+      </div>
+      <div class="card">
+        <h3>Operating Agreement</h3>
+        <p class="price">$79 one‑time</p>
+        <button onclick="buy('OPERATING_AGREEMENT')">Checkout</button>
+      </div>
+      <div class="card">
+        <h3>Mutual NDA</h3>
+        <p class="price">$49 one‑time</p>
+        <button onclick="buy('NDA')">Checkout</button>
+      </div>
+      <div class="card">
+        <h3>Work‑for‑Hire</h3>
+        <p class="price">$59 one‑time</p>
+        <button onclick="buy('WORK_FOR_HIRE')">Checkout</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/config.js"></script>
+  <script>
+    const ready = typeof STRIPE_PUBLISHABLE_KEY === 'string' && STRIPE_PUBLISHABLE_KEY.startsWith('pk_');
+    const needsPrices = Object.values(PRICE_IDS).some(v => !v || v.startsWith('price_xxx'));
+    document.getElementById('status').textContent = ready ? (needsPrices ? 'Needs price IDs' : 'Ready') : 'Missing publishable key';
+
+    const stripe = ready ? Stripe(STRIPE_PUBLISHABLE_KEY) : null;
+
+    async function buy(which){
+      if(!stripe){ alert('Add your Stripe test publishable key in config.js'); return; }
+      const price = PRICE_IDS[which];
+      if(!price || price.startsWith('price_xxx')){ alert('Add the Stripe test Price ID for '+which+' in config.js'); return; }
+      const {error} = await stripe.redirectToCheckout({
+        lineItems: [{ price, quantity: 1 }],
+        mode: 'payment',
+        successUrl: window.location.origin + '/success.html',
+        cancelUrl: window.location.origin + '/cancel.html',
+      });
+      if(error){ alert(error.message); }
+    }
+  </script>
+</body>
+</html>
