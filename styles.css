@@ -1,38 +1,24 @@
+
 :root{--bg:#f7f9fc;--ink:#0b132b;--muted:#6b7280;--line:#e6eaf1;--brand:#2563eb;--card:#fff}
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
-.wrap{max-width:1060px;margin:0 auto;padding:18px}
-.hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 6px 18px rgba(0,0,0,.06)}
-h1{margin:0 0 8px;font-size:clamp(26px,4vw,38px)}
-h2{margin:6px 0 10px;font-size:22px}
-p{margin:0 0 10px}
-a.btn,button.btn{display:inline-block;padding:10px 14px;border-radius:10px;background:#111827;color:#fff;text-decoration:none;font-weight:700;border:0;cursor:pointer}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+  font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial}
+.wrap{max-width:980px;margin:0 auto;padding:24px}
+.topbar{display:flex;justify-content:flex-end;gap:10px;margin-bottom:12px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 6px 18px rgba(0,0,0,.06)}
+.badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.badge{background:#eef2ff;border:1px solid #dbeafe;color:#1d4ed8;border-radius:999px;padding:8px 12px;font-weight:700}
+.btn{display:inline-block;background:#111827;color:#fff;text-decoration:none;border-radius:10px;padding:10px 14px;font-weight:800}
 .btn.primary{background:var(--brand)}
-.pills{display:flex;gap:10px;flex-wrap:wrap}
-.pill{background:#f3f6fb;border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-weight:700;color:#374151}
-.footer{color:var(--muted);text-align:center;margin-top:18px}
-
-/* Products */
-.chooser{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:stretch}
-@media (max-width:900px){.chooser{grid-template-columns:1fr}}
-.opt{display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:#fff;border-radius:14px;padding:14px;min-height:68px}
-.opt > input[type=checkbox]{flex:0 0 auto;width:18px;height:18px;margin:0 4px 0 0}
-.name{font-weight:800}
-.price{font-weight:800}
-.right{margin-left:auto;text-align:right}
-.sum{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding:14px;border:1px dashed #cfd6e3;border-radius:12px;background:#f7f9fc}
-.muted{color:var(--muted)}
-.note{margin-top:10px;font-size:14px;color:#6b7280;text-align:center}
-
-/* Intake forms */
-.section{margin-top:16px}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
-@media (max-width:900px){.form-grid{grid-template-columns:1fr}}
-label{display:block;font-weight:800;margin-bottom:6px}
-input,select,textarea{width:100%;border:1px solid #cfd6e3;border-radius:10px;padding:10px;font-size:16px;background:#fff}
-.help{font-size:12px;color:#6b7280;margin-top:6px}
-.actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
-.badge{display:inline-block;background:#eef2ff;color:#1d4ed8;border:1px solid #dbeafe;border-radius:999px;padding:6px 10px;font-weight:700;margin-right:6px}
-.breadcrumb{color:var(--muted);font-size:14px;margin-bottom:10px}
-hr.sep{border:0;border-top:1px solid var(--line);margin:16px 0}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card{border:1px solid var(--line);border-radius:12px;padding:12px}
+.item{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:center}
+.item .name{font-weight:800}
+.item .sub{color:#6b7280;font-size:14px}
+.item .price{font-weight:800}
+.control{display:flex;justify-content:flex-end;gap:10px;margin-top:10px}
+.note{color:#6b7280;text-align:center;font-size:14px}
+.footer{color:#9ca3af;text-align:center;margin-top:18px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:760px){.row,.grid2{grid-template-columns:1fr}}
+input,select,textarea{width:100%;padding:10px;border:1px solid #cfd6e3;border-radius:10px}

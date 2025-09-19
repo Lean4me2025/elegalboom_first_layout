@@ -1,49 +1,57 @@
-<!doctype html><html lang="en"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Provide Your Information — ElegalBoom</title><link rel="stylesheet" href="styles.css?v=rel1"/></head>
-<body><div class="wrap"><div class="hdr"><div><div class="breadcrumb">Products → Provide Your Information</div><h1 style="margin:0">Your Information</h1></div><a class="btn" href="products.html">Back to Products</a></div>
-<div id="selectionBadges" class="card" style="margin-bottom:12px"></div>
-<div class="card"><div id="formMount"></div><hr class="sep"/><div class="actions"><a class="btn" href="products.html">Back</a><a class="btn primary" id="toCheckout">Purchase</a></div></div>
-<div class="footer">&copy; <span id="y"></span> ElegalBoom</div></div>
-<script src="config.js"></script>
-<script>
-const formMount=document.getElementById('formMount');const badges=document.getElementById('selectionBadges');const selected=JSON.parse(localStorage.getItem('eb_selected')||'[]');
-if(!selected.length){formMount.innerHTML='<p class="muted">No products selected. <a href="products.html">Choose products first</a>.</p>';}
-else{
-  const names={PARTNERSHIP:'Partnership Agreement',LLC:'LLC Formation',WORK_FOR_HIRE:'Work‑for‑Hire Agreement',BUNDLE:'LegalBoom Document Bundle',EXPEDITED:'Expedited Processing',NDA:'Non‑Disclosure Agreement (NDA)'};
-  const wrap=document.createElement('div');selected.forEach(k=>{const b=document.createElement('span');b.className='badge';b.textContent=names[k]||k;wrap.appendChild(b);});badges.innerHTML='<strong>Selected:</strong> ';badges.appendChild(wrap);
 
-  const schemas={
-    LLC:[['LLC Name','text','llc_name'],['Formation State','select','state',['CA','TX','PA','OH','Other']],['Principal Office Address','text','principal_address'],['Registered Agent Name','text','ra_name'],['Registered Agent Address','text','ra_address'],['Organizer Name','text','org_name'],['Organizer Address','text','org_address'],['Effective Date','date','effective_date'],['Management Structure','select','mgmt',['Member‑Managed','Manager‑Managed']]],
-    PARTNERSHIP:[['Partnership Name','text','partnership_name'],['Governing State','select','p_state',['CA','TX','PA','OH','Other']],['Partner #1 Name','text','p1_name'],['Partner #1 Address','text','p1_addr'],['Partner #1 Ownership %','number','p1_pct'],['Partner #2 Name','text','p2_name'],['Partner #2 Address','text','p2_addr'],['Partner #2 Ownership %','number','p2_pct'],['Effective Date','date','p_effective']],
-    WORK_FOR_HIRE:[['Company/Client Name','text','client_name'],['Contractor Name','text','contractor_name'],['Project/Work Description','textarea','work_desc'],['Effective Date','date','wfh_effective'],['Payment/Consideration','text','wfh_payment']],
-    NDA:[['Party A Name','text','nda_a'],['Party A Address','text','nda_a_addr'],['Party B Name','text','nda_b'],['Party B Address','text','nda_b_addr'],['Term (months)','number','nda_term'],['Effective Date','date','nda_effective']],
-    EXPEDITED:[['Preferred Delivery Timeframe','select','exp_speed',['Same Day','24 Hours','48 Hours']],['Notes (optional)','textarea','exp_notes']],
-    BUNDLE:[['Primary Contact Name','text','bundle_contact'],['Primary Email','text','bundle_email'],['Company/Organization','text','bundle_company']]
-  };
-  const titleMap={LLC:'LLC Formation',PARTNERSHIP:'Partnership Agreement',WORK_FOR_HIRE:'Work‑for‑Hire Agreement',BUNDLE:'LegalBoom Document Bundle',EXPEDITED:'Expedited Processing',NDA:'Non‑Disclosure Agreement (NDA)'};
-  const makeField=(def)=>{const [label,type,name,opts,help]=[def[0],def[1],def[2],def[3],def[4]];const cell=document.createElement('div');const id='f_'+name;
-    if(type==='select'){const options=(opts||[]).map(o=>'<option>'+o+'</option>').join('');cell.innerHTML='<label for="'+id+'">'+label+'</label><select id="'+id+'" name="'+name+'"><option value="">Select…</option>'+options+'</select>';}
-    else if(type==='textarea'){cell.innerHTML='<label for="'+id+'">'+label+'</label><textarea id="'+id+'" name="'+name+'" rows="4"></textarea>';}
-    else{const itype=(type==='number'||type==='date')?type:'text';cell.innerHTML='<label for="'+id+'">'+label+'</label><input id="'+id+'" name="'+name+'" type="'+itype+'"/>';}if(help){const h=document.createElement('div');h.className='help';h.textContent=help;cell.appendChild(h);}return cell;};
+<!doctype html><html><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Provide Your Information</title>
+<link rel="stylesheet" href="styles.css?v=fix1"/>
+<script src="config.js?v=fix1"></script>
+<script src="intake.js?v=fix1" defer></script>
+</head><body>
+<div class="wrap">
+  <div class="topbar"><a class="btn" href="products.html">Back to Products</a></div>
+  <h1>Your Information</h1>
+  <div class="panel">
+    <form id="f">
+      <div class="grid2">
+        <div><label>Full Name<input name="full_name"/></label></div>
+        <div><label>Email<input name="email"/></label></div>
+      </div>
+      <div><label>Phone<input name="phone"/></label></div>
+      <div><label>State<select name="state" id="state"></select></label></div>
 
-  selected.forEach(key=>{const section=document.createElement('section');section.className='section';section.innerHTML='<h2>'+ (titleMap[key]||key) +'</h2>';const grid=document.createElement('div');grid.className='form-grid';
-    (schemas[key]||[]).forEach(def=>{grid.appendChild(makeField(def));});section.appendChild(grid);
-    const extra=document.createElement('div');extra.id='extras_'+key;extra.className='section';section.appendChild(extra);
-    formMount.appendChild(section);formMount.appendChild(document.createElement('hr')).className='sep';});
-  // Extras by state
-  const STATE_EXTRAS={
-    LLC:{TX:[['County of Principal Office','text','tx_county',null,'Texas asks for county of the registered office.'],PA:[['Commercial Registered Office Provider (CROP)?','select','pa_crop',['Yes','No']],['CROP/Registered Office Name','text','pa_crop_name'],['Docketing Statement Email','text','pa_docket_email']],CA:[['Initial CA Street Address (no P.O. Box)','text','ca_street'],['Service of Process Consent on file?','select','ca_sop',['Yes','No']]],OH:[['Statutory Agent Acceptance on file?','select','oh_agent_accept',['Yes','No']]]},
-    PARTNERSHIP:{PA:[['Principal Office County','text','pa_p_county'],['LLP registration?','select','pa_is_llp',['No','Yes']]],TX:[['Assumed Name to be Registered?','select','tx_assumed',['No','Yes']]]}
-  };
-  function renderExtras(product,state){const extras=(STATE_EXTRAS[product]||{})[state]||[];const mount=document.getElementById('extras_'+product);if(!mount) return;mount.innerHTML='';if(!extras.length) return;const title=document.createElement('h2');title.textContent='State‑Specific Details for '+state;mount.appendChild(title);const grid=document.createElement('div');grid.className='form-grid';extras.forEach(def=>grid.appendChild(makeField(def)));mount.appendChild(grid);}
-  const llcState=document.getElementById('f_state');if(llcState){ llcState.addEventListener('change', e=> renderExtras('LLC', e.target.value)); }
-  const pState=document.getElementById('f_p_state');if(pState){ pState.addEventListener('change', e=> renderExtras('PARTNERSHIP', e.target.value)); }
-}
-document.getElementById('toCheckout').onclick=()=>{
-  const sel=JSON.parse(localStorage.getItem('eb_selected')||'[]');if(sel.length===0){alert('No products selected.');return;}
-  if(sel.length>1){alert('For multiple selections, use a bundle link or API checkout later. For now, purchase one item at a time.');return;}
-  const k=sel[0];const link=(PAYMENT_LINKS||{})[k]||"";if(!link){alert('Missing Payment Link for '+k+'. Paste it into config.js.');return;}window.location.href=link;
-};
-document.getElementById('y').textContent=new Date().getFullYear();
-</script></body></html>
+      <div id="llc" class="card" style="display:none"><strong>LLC Formation</strong>
+        <div class="grid2">
+          <div><label>LLC Name<input name="llc_name"/></label></div>
+          <div><label>Registered Agent<input name="ra_name"/></label></div>
+        </div>
+      </div>
+
+      <div id="partnership" class="card" style="display:none"><strong>Partnership Agreement</strong>
+        <div class="grid2">
+          <div><label>Partnership Name<input name="p_name"/></label></div>
+          <div><label>Effective Date<input name="p_date" placeholder="MM/DD/YYYY"/></label></div>
+        </div>
+      </div>
+
+      <div id="nda" class="card" style="display:none"><strong>NDA</strong>
+        <div class="grid2">
+          <div><label>Party A<input name="nda_a"/></label></div>
+          <div><label>Party B<input name="nda_b"/></label></div>
+        </div>
+      </div>
+
+      <div id="wfh" class="card" style="display:none"><strong>Work‑for‑Hire</strong>
+        <div class="grid2">
+          <div><label>Contractor Name<input name="wfh_contractor"/></label></div>
+          <div><label>Scope<input name="wfh_scope"/></label></div>
+        </div>
+      </div>
+
+      <div class="control">
+        <a class="btn" href="products.html">Back</a>
+        <button class="btn primary" type="submit">Purchase</button>
+      </div>
+    </form>
+  </div>
+  <p class="footer">© ElegalBoom</p>
+</div>
+</body></html>
