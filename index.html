@@ -1,13 +1,35 @@
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome to ElegalBoom</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Welcome to ELegalBoom</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script src="config.js"></script>
 </head>
 <body>
-  <h1>Welcome to ElegalBoom.com</h1>
-  <a href="products.html">View Our Products and Make Your Selections</a>
+  <div class="head-actions">
+    <a class="btn ghost" href="products.html">View Our Products and Make Your Selections</a>
+  </div>
+  <div class="wrap">
+    <div class="panel">
+      <h1>Welcome to ElegalBoom.com</h1>
+      <p class="lead">We’ll securely collect your information and generate the documents you need — tailored to your state.</p>
+      <p><a class="btn" href="products.html">Get Started</a></p>
+
+      <div class="pills">
+        <span class="pill">Secure Stripe Checkout</span>
+        <span class="pill">State‑Aware Forms (50 States)</span>
+        <span class="pill">Instant Document Delivery</span>
+      </div>
+      <p class="note" style="margin-top:12px">Answer a few guided questions, review your details, and check out securely.</p>
+    </div>
+    <footer>© <span id="y"></span> ElegalBoom</footer>
+  </div>
+  <script>document.getElementById('y').textContent = window.ELEGALBOOM_CONFIG.year;</script>
 </body>
 </html>

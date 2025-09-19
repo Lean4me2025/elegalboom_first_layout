@@ -1,15 +1,35 @@
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Select Your Documents</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="products.js" defer></script>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="config.js"></script>
 </head>
 <body>
-  <h1>Select Your Documents</h1>
-  <div id="product-list"></div>
-  <button onclick="window.location.href='intake.html'">Provide Your Information</button>
+  <div class="head-actions">
+    <a class="btn ghost" href="index.html">Home</a>
+  </div>
+  <div class="wrap">
+    <h1>Select Your Documents</h1>
+    <div class="panel">
+      <p class="lead">Pick one or more document types or services. These are the prices you’ll pay. Your total will be shown below. <span class="badge">Payments are processed securely by Stripe.</span></p>
+      <div id="productGrid" class="grid"></div>
+
+      <hr/>
+      <div class="row">
+        <div><span class="note">Estimated total</span><div class="total" id="total">$0</div></div>
+        <div class="actions">
+          <a class="btn ghost" href="intake.html">Provide Your Information</a>
+          <button id="buyBtn" class="btn">Buy Selected</button>
+        </div>
+      </div>
+    </div>
+    <footer>© <span id="y"></span> ElegalBoom</footer>
+  </div>
+  <script src="products.js"></script>
+  <script>document.getElementById('y').textContent = window.ELEGALBOOM_CONFIG.year;</script>
 </body>
 </html>
