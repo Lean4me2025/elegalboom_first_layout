@@ -4,30 +4,21 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>LLC Formation — Intake</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    :root{ --bg1:#f7f9fc; --bg2:#eef2f7; --text:#0b132b; --muted:#6b7280; --primary:#0a66c2; --radius:16px; --shadow:0 10px 24px rgba(0,0,0,.08); }
-    *{box-sizing:border-box}
-    body{margin:0;min-height:100vh;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:var(--text);font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto}
+    body{font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto; background:#f7f9fc; color:#0b132b; margin:0}
     .wrap{max-width:900px;margin:0 auto;padding:28px}
-    header{display:flex;align-items:center;gap:10px;padding:4px 0}
-    .logo{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#0b132b;color:#fff;font-weight:900}
-    h1{font-family:Merriweather, Georgia, serif;font-weight:900;margin:16px 0 6px}
-    .card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:26px;margin:18px 0}
-    .help{color:var(--muted);margin:0 0 12px}
+    .card{background:#fff;border-radius:16px;box-shadow:0 10px 24px rgba(0,0,0,.08);padding:26px;margin:18px 0}
+    .progress{height:8px;background:#e6e8ee;border-radius:999px;overflow:hidden;margin:8px 0 18px}
+    .bar{height:100%;background:#0a66c2;width:25%;transition:width .3s ease}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
     @media (max-width:900px){ .grid{grid-template-columns:1fr} }
     label{font-weight:600;display:block;margin:6px 0 4px}
     input,select,textarea{width:100%;padding:12px;border:1px solid #d6d8df;border-radius:10px}
-    input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(10,102,194,.12)}
+    input:focus,select:focus,textarea:focus{outline:none;border-color:#0a66c2;box-shadow:0 0 0 3px rgba(10,102,194,.12)}
     .btnRow{display:flex;gap:10px;justify-content:flex-end;margin-top:12px}
     .btn{border:0;border-radius:12px;padding:12px 18px;cursor:pointer;font-weight:800}
     .btn.secondary{background:#eef2f7;color:#0b132b}
-    .btn.primary{background:var(--primary);color:#fff}
-    .progress{height:8px;background:#e6e8ee;border-radius:999px;overflow:hidden;margin:8px 0 18px}
-    .bar{height:100%;background:var(--primary);width:25%;transition:width .3s ease}
+    .btn.primary{background:#0a66c2;color:#fff}
     .kv{display:grid;grid-template-columns:220px 1fr;gap:10px}
     @media (max-width:900px){ .kv{grid-template-columns:1fr} }
     .kv .k{font-weight:700;background:#f9fafb;border:1px solid #e5e7eb;padding:8px 10px;border-radius:10px}
@@ -36,55 +27,28 @@
 </head>
 <body>
   <div class="wrap">
-    <header><div class="logo">EB</div><strong>ElegalBoom</strong></header>
     <h1>LLC Formation — Intake</h1>
-    <p class="help">Tell us about your company. We’ll adapt the questions to your state automatically.</p>
-
     <div class="card">
       <div class="progress"><div class="bar" id="bar"></div></div>
-
-      <!-- Step 1 -->
       <section id="step1">
         <h3>Company Basics</h3>
         <div class="grid">
           <div><label>LLC Name<input name="llc_name" required></label></div>
-          <div>
-            <label>Formation State
-              <select name="state" id="state" required>
-                <option value="">Select…</option>
-                <option value="TX">Texas</option>
-                <option value="CA">California</option>
-                <option value="PA">Pennsylvania</option>
-                <option value="OH">Ohio</option>
-                <option value="FL">Florida</option>
-                <option value="NY">New York</option>
-                <option value="WA">Washington</option>
-                <option value="GA">Georgia</option>
-                <option value="IL">Illinois</option>
-                <option value="AZ">Arizona</option>
-              </select>
-            </label>
-          </div>
+          <div><label>Formation State<select name="state" id="state" required>
+            <option value="">Select…</option><option>TX</option><option>CA</option><option>PA</option><option>OH</option>
+          </select></label></div>
           <div style="grid-column:1/-1"><label>Principal Office Address<textarea name="principal_address" rows="2" required></textarea></label></div>
           <div><label>Registered Agent Name<input name="registered_agent_name" required></label></div>
           <div><label>Registered Agent Address<textarea name="registered_agent_address" rows="2" required></textarea></label></div>
           <div><label>Organizer Name<input name="organizer_name" required></label></div>
           <div><label>Organizer Address<textarea name="organizer_address" rows="2" required></textarea></label></div>
           <div><label>Effective Date<input type="date" name="effective_date" required></label></div>
-          <div>
-            <label>Management Structure
-              <select name="management_type" required>
-                <option value="">Select…</option>
-                <option>MEMBER-MANAGED</option>
-                <option>MANAGER-MANAGED</option>
-              </select>
-            </label>
-          </div>
+          <div><label>Management Structure<select name="management_type" required>
+            <option value="">Select…</option><option>MEMBER-MANAGED</option><option>MANAGER-MANAGED</option>
+          </select></label></div>
         </div>
         <div class="btnRow"><button class="btn primary" id="to2">Next: Members</button></div>
       </section>
-
-      <!-- Step 2 -->
       <section id="step2" style="display:none">
         <h3>Members / Managers</h3>
         <div class="grid">
@@ -95,16 +59,12 @@
         </div>
         <div class="btnRow"><button class="btn secondary" id="back1">Back</button><button class="btn primary" id="to3">Next: State Requirements</button></div>
       </section>
-
-      <!-- Step 3 -->
       <section id="step3" style="display:none">
         <h3>Additional State Requirements</h3>
         <div id="extras"></div>
-        <p class="help" id="notes"></p>
+        <p id="notes" style="color:#6b7280"></p>
         <div class="btnRow"><button class="btn secondary" id="back2">Back</button><button class="btn primary" id="review">Review & Continue</button></div>
       </section>
-
-      <!-- Step 4 -->
       <section id="step4" style="display:none">
         <h3>Review</h3>
         <div id="reviewGrid" class="kv"></div>
@@ -114,75 +74,19 @@
   </div>
 
 <script>
-const bar=document.getElementById('bar');
-function setProgress(n){ bar.style.width=(n*25)+'%'; }
-
-const step1=document.getElementById('step1');
-const step2=document.getElementById('step2');
-const step3=document.getElementById('step3');
-const step4=document.getElementById('step4');
-
-function validate(section){
-  const fields=section.querySelectorAll('input,select,textarea');
-  for(const el of fields){
-    if(section.style.display==='none') continue;
-    if(!el.checkValidity()){ el.reportValidity(); el.focus(); return false; }
-  }
-  return true;
-}
-function collect(){
-  const data={};
-  document.querySelectorAll('input,select,textarea').forEach(el=>{
-    if(!el.name) return;
-    if(el.closest('#step3') && step3.style.display==='none') return;
-    data[el.name]=el.value;
-  });
-  return data;
-}
-function renderReview(d){
-  const grid=document.getElementById('reviewGrid'); grid.innerHTML='';
-  for(const [k,v] of Object.entries(d)){
-    const kdiv=document.createElement('div'); kdiv.className='k'; kdiv.textContent=k.replace(/_/g,' ').replace(/\b\w/g,s=>s.toUpperCase());
-    const vdiv=document.createElement('div'); vdiv.className='v'; vdiv.textContent=v||'—';
-    grid.appendChild(kdiv); grid.appendChild(vdiv);
-  }
-}
-
+const bar=document.getElementById('bar'); function setProgress(n){ bar.style.width=(n*25)+'%'; }
+const step1=document.getElementById('step1'); const step2=document.getElementById('step2'); const step3=document.getElementById('step3'); const step4=document.getElementById('step4');
+function validate(section){ const fields=section.querySelectorAll('input,select,textarea'); for(const el of fields){ if(section.style.display==='none') continue; if(!el.checkValidity()){ el.reportValidity(); el.focus(); return false; } } return true; }
+function collect(){ const d={}; document.querySelectorAll('input,select,textarea').forEach(el=>{ if(!el.name) return; if(el.closest('#step3') && step3.style.display==='none') return; d[el.name]=el.value; }); return d; }
+function renderReview(d){ const g=document.getElementById('reviewGrid'); g.innerHTML=''; for(const [k,v] of Object.entries(d)){ const kdiv=document.createElement('div'); kdiv.className='k'; kdiv.textContent=k.replace(/_/g,' ').replace(/\b\w/g,s=>s.toUpperCase()); const vdiv=document.createElement('div'); vdiv.className='v'; vdiv.textContent=v||'—'; g.appendChild(kdiv); g.appendChild(vdiv);} }
 document.getElementById('to2').onclick=()=>{ if(!validate(step1)) return; step1.style.display='none'; step2.style.display='block'; setProgress(2); window.scrollTo(0,0); };
 document.getElementById('back1').onclick=()=>{ step2.style.display='none'; step1.style.display='block'; setProgress(1); window.scrollTo(0,0); };
 document.getElementById('to3').onclick=()=>{ if(!validate(step2)) return; step2.style.display='none'; step3.style.display='block'; setProgress(3); renderExtras(); window.scrollTo(0,0); };
 document.getElementById('back2').onclick=()=>{ step3.style.display='none'; step2.style.display='block'; setProgress(2); window.scrollTo(0,0); };
 document.getElementById('review').onclick=()=>{ if(!validate(step3)) return; const d=collect(); renderReview(d); step3.style.display='none'; step4.style.display='block'; setProgress(4); window.scrollTo(0,0); };
 document.getElementById('back3').onclick=()=>{ step4.style.display='none'; step3.style.display='block'; setProgress(3); window.scrollTo(0,0); };
-
-// State extras (load if available)
-async function renderExtras(){
-  const extras=document.getElementById('extras'); const notes=document.getElementById('notes'); extras.innerHTML=''; notes.textContent='';
-  try{
-    const res=await fetch('/config/state_overrides.json'); if(!res.ok) throw 0; const cfg=await res.json();
-    const st=(document.getElementById('state').value||'').toUpperCase(); const c=cfg[st];
-    if(!c){ notes.textContent='No additional questions required for your state.'; return; }
-    (c.extraFields||[]).forEach(f=>{
-      const wrap=document.createElement('div'); wrap.style.margin='10px 0';
-      const lab=document.createElement('label'); lab.textContent=f.label+(f.required?' *':''); lab.style.display='block'; lab.style.fontWeight='600'; lab.style.margin='6px 0';
-      let input;
-      if(f.type==='textarea'){ input=document.createElement('textarea'); input.rows=2; }
-      else if(f.type==='select'){ input=document.createElement('select'); input.appendChild(new Option('Select…','')); (f.options||[]).forEach(o=>input.appendChild(new Option(o,o))); }
-      else { input=document.createElement('input'); input.type=f.type||'text'; if(f.min!==undefined) input.min=f.min; if(f.max!==undefined) input.max=f.max; if(f.pattern) input.pattern=f.pattern; }
-      input.name=f.id; if(f.required) input.required=true;
-      wrap.appendChild(lab); wrap.appendChild(input); extras.appendChild(wrap);
-    });
-    if(c.notes) notes.textContent=c.notes;
-  } catch(e){ notes.textContent=''; }
-}
-
-document.getElementById('checkout').onclick=async()=>{
-  const answers=collect();
-  try{ await fetch('/api/save-intake',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({product:'llc',answers})}); }catch(e){}
-  // placeholder checkout
-  window.location.href='/success.html';
-};
-
+async function renderExtras(){ const extras=document.getElementById('extras'); const notes=document.getElementById('notes'); extras.innerHTML=''; notes.textContent=''; try{ const res=await fetch('/config/state_overrides.json'); if(!res.ok) throw 0; const cfg=await res.json(); const st=(document.getElementById('state').value||'').toUpperCase(); const c=cfg[st]; if(!c){ notes.textContent='No additional questions required for your state.'; return; } (c.extraFields||[]).forEach(f=>{ const wrap=document.createElement('div'); wrap.style.margin='10px 0'; const lab=document.createElement('label'); lab.textContent=f.label+(f.required?' *':''); lab.style.display='block'; lab.style.fontWeight='600'; lab.style.margin='6px 0'; let input; if(f.type==='textarea'){ input=document.createElement('textarea'); input.rows=2; } else if(f.type==='select'){ input=document.createElement('select'); input.appendChild(new Option('Select…','')); (f.options||[]).forEach(o=>input.appendChild(new Option(o,o))); } else { input=document.createElement('input'); input.type=f.type||'text'; if(f.min!==undefined) input.min=f.min; if(f.max!==undefined) input.max=f.max; if(f.pattern) input.pattern=f.pattern; } input.name=f.id; if(f.required) input.required=true; wrap.appendChild(lab); wrap.appendChild(input); extras.appendChild(wrap); }); if(c.notes) notes.textContent=c.notes; }catch(e){ notes.textContent=''; } }
+document.getElementById('checkout').onclick=()=>{ window.location.href='/success.html?v=1'; };
 setProgress(1);
 </script>
 </body>
