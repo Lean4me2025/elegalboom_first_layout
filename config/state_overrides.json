@@ -35,7 +35,7 @@
         "required": true
       }
     ],
-    "notes": "TX governing authority; RA consent separate."
+    "notes": "TX often wants governing authority details; registered agent consent may be separate."
   },
   "PA": {
     "label": "Pennsylvania",
@@ -74,7 +74,31 @@
         "required": true
       }
     ],
-    "notes": "PA docketing info required."
+    "notes": "PA docketing statement data; registered office must be in PA or CROP."
+  },
+  "NY": {
+    "label": "New York",
+    "extraFields": [
+      {
+        "id": "ny_county",
+        "label": "County for Publication",
+        "type": "text",
+        "required": true
+      }
+    ],
+    "notes": "Publication required after formation."
+  },
+  "AZ": {
+    "label": "Arizona",
+    "extraFields": [
+      {
+        "id": "az_publication_city",
+        "label": "City for Publication",
+        "type": "text",
+        "required": true
+      }
+    ],
+    "notes": "Publication requirement varies by county/newspaper."
   },
   "CA": {
     "label": "California",
@@ -100,30 +124,6 @@
         }
       }
     ],
-    "notes": "SI-550 due within 90 days."
-  },
-  "NY": {
-    "label": "New York",
-    "extraFields": [
-      {
-        "id": "ny_county",
-        "label": "County for Publication",
-        "type": "text",
-        "required": true
-      }
-    ],
-    "notes": "Publication after formation."
-  },
-  "AZ": {
-    "label": "Arizona",
-    "extraFields": [
-      {
-        "id": "az_publication_city",
-        "label": "City for Publication",
-        "type": "text",
-        "required": true
-      }
-    ],
-    "notes": "Publication requirement varies."
+    "notes": "Form SI-550 due within 90 days; not part of Articles."
   }
 }
