@@ -1,9 +1,12 @@
-// Fill these with your Stripe TEST keys/IDs first, then swap to LIVE later.
+// Stripe config (TEST first, then swap to LIVE). Do NOT put secret keys here.
 const STRIPE_PUBLISHABLE_KEY = 'pk_test_xxx_replace_me';
 
+// Map each product to its Price ID from Stripe Dashboard → Products → Price
 const PRICE_IDS = {
-  LLC: 'price_xxx_llc',                      // e.g., LLC Formation $99
-  OPERATING_AGREEMENT: 'price_xxx_operating',// e.g., Operating Agreement $79
-  NDA: 'price_xxx_nda',                      // e.g., Mutual NDA $49
-  WORK_FOR_HIRE: 'price_xxx_wfh',            // e.g., Work‑for‑Hire $59
+  WORK_FOR_HIRE:   'price_xxx_wfh',    // $79
+  BUNDLE:          'price_xxx_bundle', // $449
+  EXPEDITED:       'price_xxx_exp',    // $79
+  NDA:             'price_xxx_nda',    // $49
+  PARTNERSHIP:     'price_xxx_part',   // $199
+  LLC:             'price_xxx_llc',    // $299
 };

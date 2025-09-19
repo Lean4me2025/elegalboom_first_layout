@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>ElegalBoom — Products</title>
+  <link rel="stylesheet" href="/styles.css"/>
+  <script src="https://js.stripe.com/v3/"></script>
+  <script src="/config.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hdr">
+      <h1 style="margin:0">Products</h1>
+      <a class="btn" href="/index.html">Home</a>
+    </div>
+
+    <div class="card">
+      <p class="muted">Prices shown here are labels; the actual charge always comes from the Stripe Price ID for each product.</p>
+      <div id="status" class="muted" style="margin:8px 0 12px">Checking Stripe config…</div>
+      <div class="grid">
+        <div class="item">
+          <div class="name">Work‑for‑Hire Agreement</div>
+          <div class="price">$79</div>
+          <button class="btn" onclick="buy('WORK_FOR_HIRE')">Buy Now</button>
+        </div>
+        <div class="item">
+          <div class="name">LegalBoom Document Bundle</div>
+          <div class="price">$449</div>
+          <button class="btn" onclick="buy('BUNDLE')">Buy Now</button>
+        </div>
+        <div class="item">
+          <div class="name">Expedited Processing</div>
+          <div class="price">$79</div>
+          <button class="btn" onclick="buy('EXPEDITED')">Buy Now</button>
+        </div>
+        <div class="item">
+          <div class="name">Non‑Disclosure Agreement (NDA)</div>
+          <div class="price">$49</div>
+          <button class="btn" onclick="buy('NDA')">Buy Now</button>
+        </div>
+        <div class="item">
+          <div class="name">Partnership Agreement</div>
+          <div class="price">$199</div>
+          <button class="btn" onclick="buy('PARTNERSHIP')">Buy Now</button>
+        </div>
+        <div class="item">
+          <div class="name">LLC Formation</div>
+          <div class="price">$299</div>
+          <button class="btn" onclick="buy('LLC')">Buy Now</button>
+        </div>
+      </div>
+    </div>
+
+    <footer>&copy; <span id="y"></span> ElegalBoom</footer>
+  </div>
+
+<script>
+  const statusEl = document.getElementById('status');
+  const ready = typeof STRIPE_PUBLISHABLE_KEY === 'string' && STRIPE_PUBLISHABLE_KEY.startsWith('pk_');
+  const missing = Object.values(PRICE_IDS).some(v => !v || v.startsWith('price_xxx'));
+  statusEl.textContent = ready ? (missing ? 'Stripe config: add your Price IDs in config.js' : 'Stripe config: OK') : 'Stripe config: add your publishable key in config.js';
+
+  const stripe = ready ? Stripe(STRIPE_PUBLISHABLE_KEY) : null;
+
+  async function buy(which){
+    if(!stripe){ alert('Add your Stripe publishable key in config.js'); return; }
+    const price = PRICE_IDS[which];
+    if(!price || price.startsWith('price_xxx')){ alert('Add the Stripe Price ID for '+which+' in config.js'); return; }
+    const {error} = await stripe.redirectToCheckout({
+      lineItems: [{ price, quantity: 1 }],
+      mode: 'payment',
+      successUrl: window.location.origin + '/success.html',
+      cancelUrl: window.location.origin + '/cancel.html',
+    });
+    if(error){ alert(error.message); }
+  }
+  document.getElementById('y').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
