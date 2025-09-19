@@ -1,26 +1,59 @@
 <!doctype html><html lang="en"><head>
 <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>ElegalBoom — Select Your Documents</title><link rel="stylesheet" href="/styles.css"/>
-<script src="https://js.stripe.com/v3/"></script><script src="/config.js"></script></head>
-<body><div class="wrap"><div class="hdr"><h1 style="margin:0">Select Your Documents</h1><a class="btn" href="/index.html">Home</a></div>
-<div class="card"><p class="muted">Pick one or more document types or services. These are the prices you’ll pay. Your total will be shown below.</p>
-<div id="status" class="muted" style="margin:8px 0 12px">Checking Stripe config…</div>
+<title>Select Your Documents — ElegalBoom</title>
+<link rel="stylesheet" href="styles.css?v=rel1"/><script src="config.js"></script></head>
+<body><div class="wrap"><div class="hdr"><h1 style="margin:0">Select Your Documents</h1><a class="btn" href="index.html">Home</a></div>
+<div class="card">
+<p class="muted">Pick one or more document types or services. These are the prices you’ll pay. Your total will be shown below.</p>
 <div class="chooser" id="chooser"></div>
 <div class="sum"><div><strong>Estimated total</strong></div><div id="total" class="price">$0</div></div>
 <p class="note">Payments are processed securely by Stripe.</p>
-<div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px"><a class="btn" id="toIntake">Provide Your Information and Purchase</a></div></div>
+<div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px">
+  <a class="btn" id="toIntake">Provide Your Information</a>
+  <a class="btn primary" id="buyNow">Buy Selected</a>
+</div>
+</div>
 <div class="footer">&copy; <span id="y"></span> ElegalBoom</div></div>
 <script>
-const products=[['PARTNERSHIP','Partnership Agreement','Define roles and ownership'],['LLC','LLC Formation','State‑aware LLC formation package'],['WORK_FOR_HIRE','Work‑for‑Hire Agreement','Standard engagement for contractors'],['BUNDLE','LegalBoom Document Bundle','Our most popular set'],['EXPEDITED','Expedited Processing','Priority processing by our system'],['NDA','Non‑Disclosure Agreement (NDA)','Mutual confidentiality agreement']];
+const products=[
+  ['PARTNERSHIP','Partnership Agreement','Define roles and ownership'],
+  ['LLC','LLC Formation','State‑aware LLC formation package'],
+  ['WORK_FOR_HIRE','Work‑for‑Hire Agreement','Standard engagement for contractors'],
+  ['BUNDLE','LegalBoom Document Bundle','Our most popular set'],
+  ['EXPEDITED','Expedited Processing','Priority processing by our system'],
+  ['NDA','Non‑Disclosure Agreement (NDA)','Mutual confidentiality agreement']
+];
 const chooser=document.getElementById('chooser');
-products.forEach(([key,name,desc])=>{const amount=DISPLAY_PRICES[key];const label=document.createElement('label');label.className='opt';label.innerHTML=`
-<input type="checkbox" data-key="${key}" data-amount="${amount}"/>
-<div><div class="name">${name}</div><div class="muted">${desc}</div></div>
-<div class="right"><div class="price">$${amount}</div></div>`;chooser.appendChild(label);});
-const saved=JSON.parse(localStorage.getItem('eb_selected')||'[]');if(saved.length){document.querySelectorAll('input[type=checkbox]').forEach(cb=>{if(saved.includes(cb.getAttribute('data-key')))cb.checked=true;});}
-const statusEl=document.getElementById('status');const ready=typeof STRIPE_PUBLISHABLE_KEY==='string'&&STRIPE_PUBLISHABLE_KEY.startsWith('pk_');const missing=Object.values(PRICE_IDS).some(v=>!v||v.startsWith('price_xxx'));statusEl.textContent=ready?(missing?'Stripe config: add your Price IDs in config.js':'Stripe config: OK'):'Stripe config: add your publishable key in config.js';
-function refreshTotal(){let sum=0;document.querySelectorAll('input[type=checkbox][data-amount]').forEach(cb=>{if(cb.checked){sum+=Number(cb.getAttribute('data-amount')||0);}});document.getElementById('total').textContent='$'+sum;const selected=Array.from(document.querySelectorAll('input[type=checkbox]')).filter(cb=>cb.checked).map(cb=>cb.getAttribute('data-key'));localStorage.setItem('eb_selected',JSON.stringify(selected));}
+products.forEach(([key,name,desc])=>{
+  const amount=DISPLAY_PRICES[key];
+  const label=document.createElement('label');
+  label.className='opt';
+  label.innerHTML=`<input type="checkbox" data-key="${key}" data-amount="${amount}"/>
+    <div><div class="name">${name}</div><div class="muted">${desc}</div></div>
+    <div class="right"><div class="price">$${amount}</div></div>`;
+  chooser.appendChild(label);
+});
+function refreshTotal(){
+  let sum=0;
+  document.querySelectorAll('input[type=checkbox]').forEach(cb=>{ if(cb.checked){ sum+=Number(cb.dataset.amount||0); } });
+  total.textContent = '$'+sum;
+  const selected = Array.from(document.querySelectorAll('input[type=checkbox]')).filter(cb=>cb.checked).map(cb=>cb.dataset.key);
+  localStorage.setItem('eb_selected', JSON.stringify(selected));
+}
 document.querySelectorAll('input[type=checkbox]').forEach(cb=>cb.addEventListener('change',refreshTotal));refreshTotal();
-document.getElementById('toIntake').onclick=()=>{const selected=JSON.parse(localStorage.getItem('eb_selected')||'[]');if(selected.length===0){alert('Select at least one item.');return;}window.location.href='/intake.html';};
+document.getElementById('toIntake').onclick=()=>{const sel=JSON.parse(localStorage.getItem('eb_selected')||'[]');if(sel.length===0){alert('Select at least one item first.');return;}window.location.href='intake.html';};
+document.getElementById('buyNow').onclick=()=>{
+  const sel=JSON.parse(localStorage.getItem('eb_selected')||'[]');
+  if(sel.length===0){alert('Select at least one item to purchase.');return;}
+  if(sel.length>1){
+    alert('Multiple selections: create a bundle Payment Link in Stripe or switch to API-based checkout later. For now, select one item to buy.');
+    return;
+  }
+  const k=sel[0];
+  const link=(PAYMENT_LINKS||{})[k]||"";
+  if(!link){alert('Missing Payment Link for '+k+'. Paste it into config.js under PAYMENT_LINKS.');return;}
+  window.location.href=link;
+};
 document.getElementById('y').textContent=new Date().getFullYear();
-</script></body></html>
+</script>
+</body></html>

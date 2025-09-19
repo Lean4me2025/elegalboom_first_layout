@@ -12,20 +12,26 @@ a.btn,button.btn{display:inline-block;padding:10px 14px;border-radius:10px;backg
 .pills{display:flex;gap:10px;flex-wrap:wrap}
 .pill{background:#f3f6fb;border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-weight:700;color:#374151}
 .footer{color:var(--muted);text-align:center;margin-top:18px}
-.chooser{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+
+/* Products */
+.chooser{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:stretch}
 @media (max-width:900px){.chooser{grid-template-columns:1fr}}
-.opt{display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:#fff;border-radius:14px;padding:14px}
+.opt{display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:#fff;border-radius:14px;padding:14px;min-height:68px}
+.opt > input[type=checkbox]{flex:0 0 auto;width:18px;height:18px;margin:0 4px 0 0}
 .name{font-weight:800}
 .price{font-weight:800}
 .right{margin-left:auto;text-align:right}
 .sum{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding:14px;border:1px dashed #cfd6e3;border-radius:12px;background:#f7f9fc}
 .muted{color:var(--muted)}
-.note{margin-top:10px;font-size:14px;color:var(--muted);text-align:center}
+.note{margin-top:10px;font-size:14px;color:#6b7280;text-align:center}
+
+/* Intake forms */
 .section{margin-top:16px}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
 @media (max-width:900px){.form-grid{grid-template-columns:1fr}}
 label{display:block;font-weight:800;margin-bottom:6px}
 input,select,textarea{width:100%;border:1px solid #cfd6e3;border-radius:10px;padding:10px;font-size:16px;background:#fff}
+.help{font-size:12px;color:#6b7280;margin-top:6px}
 .actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
 .badge{display:inline-block;background:#eef2ff;color:#1d4ed8;border:1px solid #dbeafe;border-radius:999px;padding:6px 10px;font-weight:700;margin-right:6px}
 .breadcrumb{color:var(--muted);font-size:14px;margin-bottom:10px}
