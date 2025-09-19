@@ -4,55 +4,46 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Welcome to ElegalBoom</title>
-  <meta name="description" content="Secure, simple intake to generate your state‑ready legal documents."/>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css"/>
   <style>
-    :root{
-      --bg1:#f7f9fc; --bg2:#eef2f7;
-      --text:#0b132b; --muted:#6b7280; --primary:#0a66c2;
-      --radius:16px; --shadow:0 10px 24px rgba(0,0,0,.08);
-    }
-    *{box-sizing:border-box}
-    body{margin:0;min-height:100svh;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:var(--text);font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto}
-    .wrap{max-width:820px;margin:0 auto;padding:28px}
-    header{display:flex;align-items:center;gap:10px;padding:4px 0}
-    .logo{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#0b132b;color:#fff;font-weight:900}
-    .card{margin:56px auto 24px;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:52px 30px;text-align:center}
-    h1{font-family:Merriweather, Georgia, serif;font-weight:900;font-size: clamp(22px,4vw,34px);margin:0 0 10px}
-    .lead{color:var(--muted);margin:0 0 26px}
-    .cta{display:inline-block;background:var(--primary);color:#fff;padding:15px 24px;border-radius:12px;font-weight:800;text-decoration:none}
-    /* FOOTER TRUST: deliberately small and de-emphasized */
-    .foot{max-width:820px;margin:10px auto 0;padding:0 28px;color:#8a92a3;font-size:12.5px}
-    .pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:10px 0 4px}
-    .pill{background:#f2f5fa;border:1px solid #e6eaf1;color:#2a2f36;padding:6px 10px;border-radius:999px;font-weight:600;font-size:12.5px}
-    .helper{margin:2px 0 18px;color:#9aa3b0;font-size:12.5px;text-align:center}
-    footer{color:#9aa3b0;font-size:12.5px;text-align:center;padding:18px 0 24px}
+    .wrap{max-width:980px;margin:0 auto;padding:16px}
+    .hero{background:#fff;border:1px solid #e6eaf1;border-radius:18px;padding:28px;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.06)}
+    h1{margin:0 0 8px;font-size:clamp(26px,4vw,38px)}
+    p{margin:0 0 14px;color:#374151}
+    .cta{display:inline-block;padding:12px 20px;border-radius:10px;background:#2563eb;color:#fff;text-decoration:none;font-weight:800}
+    .pills{display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+    .pill{background:#f3f6fb;border:1px solid #e6eaf1;border-radius:999px;padding:8px 14px;font-weight:700;color:#374151}
+    .hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+    .btn{display:inline-block;padding:10px 14px;border-radius:10px;background:#111827;color:#fff;text-decoration:none;font-weight:700}
+    .sub{color:#6b7280;font-size:14px;margin-top:10px}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <header><div class="logo">EB</div><strong>ElegalBoom</strong></header>
-
-    <main class="card">
-      <h1>Welcome to ElegalBoom.com</h1>
-      <p class="lead">We’ll securely collect your information and generate the documents you need — tailored to your state.</p>
-      <p><a class="cta" href="/intake.html">Get Started</a></p>
-    </main>
-
-    <!-- Trust moved to the very bottom and minimized -->
-    <div class="foot">
-      <div class="pills">
-        <span class="pill">Secure Stripe Checkout</span>
-        <span class="pill">State‑Aware Forms (50 States)</span>
-        <span class="pill">Instant Document Delivery</span>
+    <div class="hdr">
+      <div style="font-weight:900">ElegalBoom</div>
+      <div style="display:flex;gap:8px">
+        <a href="/products.html" class="btn">View Products</a>
+        <a href="/intake.html" class="btn" style="background:#2563eb">Skip to Intake</a>
       </div>
-      <div class="helper">Answer a few guided questions, review your details, and check out securely.</div>
     </div>
 
-    <footer>&copy; <span id="y"></span> ElegalBoom</footer>
+    <div class="hero">
+      <h1>Welcome to ElegalBoom.com</h1>
+      <p>We’ll securely collect your information and generate the documents you need — tailored to your state.</p>
+      <!-- Primary CTA now goes to the product list -->
+      <a href="/products.html" class="cta">Get Started</a>
+
+      <div class="pills">
+        <div class="pill">Secure Stripe Checkout</div>
+        <div class="pill">State‑Aware Forms (50 States)</div>
+        <div class="pill">Instant Document Delivery</div>
+      </div>
+      <div class="sub">Answer a few guided questions, review your details, and check out securely.</div>
+    </div>
+
+    <footer style="text-align:center;margin-top:18px;color:#6b7280">&copy; <span id="y"></span> ElegalBoom</footer>
   </div>
-  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+  <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
 </body>
 </html>
