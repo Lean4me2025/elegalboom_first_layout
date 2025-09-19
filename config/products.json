@@ -1,0 +1,81 @@
+{
+  "llc": {
+    "name": "LLC Formation Packet",
+    "priceId": "price_llc_PLACEHOLDER",
+    "templates": [
+      {
+        "path": "/templates/LLC_Articles_Universal.md",
+        "type": "md"
+      },
+      {
+        "path": "/templates/Operating_Agreement.md",
+        "type": "md"
+      },
+      {
+        "path": "/templates/State_Supplements.md",
+        "type": "md"
+      }
+    ],
+    "fields": [
+      "llc_name",
+      "state",
+      "principal_address",
+      "registered_agent_name",
+      "registered_agent_address",
+      "organizer_name",
+      "organizer_address",
+      "effective_date",
+      "management_type",
+      "member1_name",
+      "member1_pct",
+      "member2_name",
+      "member2_pct"
+    ]
+  },
+  "nda": {
+    "name": "Mutual NDA",
+    "priceId": "price_nda_PLACEHOLDER",
+    "templates": [
+      {
+        "path": "/templates/Mutual_NDA.md",
+        "type": "md"
+      }
+    ],
+    "fields": [
+      "partyA_name",
+      "partyA_address",
+      "partyB_name",
+      "partyB_address",
+      "effective_date",
+      "term_years",
+      "governing_law_state",
+      "governing_venue_county"
+    ]
+  },
+  "wfh": {
+    "name": "Work-for-Hire Agreement",
+    "priceId": "price_wfh_PLACEHOLDER",
+    "templates": [
+      {
+        "path": "/templates/Work_For_Hire.md",
+        "type": "md"
+      }
+    ],
+    "fields": [
+      "client_name",
+      "client_address",
+      "contractor_name",
+      "contractor_address",
+      "effective_date",
+      "services_description",
+      "fee_amount",
+      "net_terms",
+      "delivery_date",
+      "acceptance_days",
+      "warranty_days",
+      "cure_days",
+      "governing_law_state",
+      "governing_venue_county"
+    ]
+  }
+}

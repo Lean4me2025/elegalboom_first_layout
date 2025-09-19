@@ -1,0 +1,129 @@
+{
+  "TX": {
+    "label": "Texas",
+    "extraFields": [
+      {
+        "id": "tx_duration",
+        "label": "Duration",
+        "type": "select",
+        "options": [
+          "Perpetual",
+          "Years"
+        ],
+        "required": true
+      },
+      {
+        "id": "tx_duration_years",
+        "label": "If Years, specify #",
+        "type": "number",
+        "min": 1,
+        "showIf": {
+          "field": "tx_duration",
+          "equals": "Years"
+        }
+      },
+      {
+        "id": "tx_purpose",
+        "label": "Business Purpose (short)",
+        "type": "textarea",
+        "required": false
+      },
+      {
+        "id": "tx_governing_authority",
+        "label": "List Members/Managers (names & addresses)",
+        "type": "textarea",
+        "required": true
+      }
+    ],
+    "notes": "TX governing authority; RA consent separate."
+  },
+  "PA": {
+    "label": "Pennsylvania",
+    "extraFields": [
+      {
+        "id": "pa_activity",
+        "label": "Business Activity (short)",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "id": "pa_fein",
+        "label": "FEIN (if available)",
+        "type": "text",
+        "pattern": "^\\d{2}-?\\d{7}$",
+        "required": false
+      },
+      {
+        "id": "pa_employees",
+        "label": "Estimated # of Employees",
+        "type": "number",
+        "min": 0,
+        "required": false
+      },
+      {
+        "id": "pa_fiscal_year_end",
+        "label": "Fiscal Year End (MM)",
+        "type": "text",
+        "pattern": "^(0[1-9]|1[0-2])$",
+        "required": false
+      },
+      {
+        "id": "pa_registered_office",
+        "label": "PA Registered Office Address (or CROP)",
+        "type": "text",
+        "required": true
+      }
+    ],
+    "notes": "PA docketing info required."
+  },
+  "CA": {
+    "label": "California",
+    "extraFields": [
+      {
+        "id": "ca_si_prep",
+        "label": "Initial Statement of Information prep?",
+        "type": "select",
+        "options": [
+          "Yes",
+          "No"
+        ],
+        "required": false
+      },
+      {
+        "id": "ca_officers",
+        "label": "Officer/Manager Names & Addresses",
+        "type": "textarea",
+        "required": false,
+        "showIf": {
+          "field": "ca_si_prep",
+          "equals": "Yes"
+        }
+      }
+    ],
+    "notes": "SI-550 due within 90 days."
+  },
+  "NY": {
+    "label": "New York",
+    "extraFields": [
+      {
+        "id": "ny_county",
+        "label": "County for Publication",
+        "type": "text",
+        "required": true
+      }
+    ],
+    "notes": "Publication after formation."
+  },
+  "AZ": {
+    "label": "Arizona",
+    "extraFields": [
+      {
+        "id": "az_publication_city",
+        "label": "City for Publication",
+        "type": "text",
+        "required": true
+      }
+    ],
+    "notes": "Publication requirement varies."
+  }
+}

@@ -1,58 +1,27 @@
-# eLegalBoom Intake (Interim)
-A minimal intake funnel you can deploy on **Vercel** and link from your GoDaddy placeholder site. Visitors click “Request a Document” → fill this form → you receive the request and fulfill it. Optionally pair with **Stripe** (pay-first or pay-after).
+# ElegalBoom — State-Aware with PDF Generation
+Generated 2025-09-19.
 
-## Deploy (Quick)
-1. Create a new GitHub repo and add these files.
-2. Import the repo into **Vercel**. Accept defaults.
-3. After deploy, you'll have a URL like `https://init-elegalboom.vercel.app`. Use that in GoDaddy as the **Request** link.
+This package adds:
+- `package.json` with **stripe**, **pdfkit**, **nodemailer** for fulfillment.
+- `/api/webhook.js` that **generates PDFs** from Markdown templates by token replacement.
+- `/templates/` contains the 5 master templates (Universal Articles, Operating Agreement, NDA, Work-for-Hire, State Supplements).
 
-## Link from GoDaddy
-- Add a button or change the Contact form's redirect to: `https://YOUR-VERCEL-URL/` (or `/index.html`).
-- You can also deep-link a doc type: `https://YOUR-VERCEL-URL/?doc=LLC`.
+## Environment variables (Vercel)
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
+- `PUBLIC_BASE_URL` (e.g., https://elegalboom.com)
 
-## Optional: Stripe → Intake
-1. Create Stripe **Payment Links** or a **Checkout Session** per doc type.
-2. Set Checkout **success_url** to:
-   ```
-   https://YOUR-VERCEL-URL/?sid={CHECKOUT_SESSION_ID}&doc=LLC
-   ```
-3. The intake page will carry `sid` forward for reconciliation. Use Stripe **webhooks** in your main app if desired.
+## Flow
+1. Save intake (`/api/save-intake`) → returns `draftId`.
+2. Create Checkout (`/api/create-checkout-session`) → embeds `draftId` in Stripe metadata.
+3. Webhook (`/api/webhook`) → on success:
+   - loads templates
+   - fills placeholders like `[llc_name]` from answers
+   - writes PDFs with pdfkit
+   - TODO: upload to storage & email links (add your provider).
 
-## Data Capture
-This sample forwards submissions to a **Google Apps Script** webhook if you set the env var `APPS_SCRIPT_WEBHOOK` in Vercel.
-- In Vercel → Project → Settings → Environment Variables:
-  - `APPS_SCRIPT_WEBHOOK` = `https://script.google.com/macros/s/YOUR-DEPLOYMENT-ID/exec`
+## Notes
+- Replace placeholder Price IDs in `config/products.json`.
+- Swap the minimal `/public/intake.html` with the full state-aware intake from the previous ZIP.
+- For official state forms, you can later replace Markdown templates with **fillable PDF** versions and read them in the same pipeline.
 
-### Google Apps Script (paste into a new script attached to a Google Sheet)
-```javascript
-function doPost(e) {
-  const ss = SpreadsheetApp.openById('YOUR_SHEET_ID');
-  const sh = ss.getSheetByName('Requests') || ss.insertSheet('Requests');
-  const data = JSON.parse(e.postData.contents);
-  const headers = ['timestamp','order_id','stripe_session_id','name','email','doc_type','urgency','details'];
-  if (sh.getLastRow() === 0) sh.appendRow(headers);
-  sh.appendRow([new Date(), data.order_id||'', data.stripe_session_id||'', data.name||'', data.email||'', data.doc_type||'', data.urgency||'', data.details||'']);
-  return ContentService.createTextOutput(JSON.stringify({ok:true})).setMimeType(ContentService.MimeType.JSON);
-}
-```
-
-- Deploy as **Web app**: `Execute as Me`, `Anyone` may access (or restricted with token if you prefer). Copy the web app URL into Vercel's `APPS_SCRIPT_WEBHOOK` env var.
-
-## Local Editing
-Static files:
-- `index.html` — intake form (generates `order_id`, parses `?doc` and `?sid`)
-- `success.html` — confirmation page
-- `styles.css` — minimal dark UI
-
-Serverless:
-- `api/submit.js` — receives POST, forwards to Apps Script (if configured), redirects to success.
-
-## Compliance
-The top bar and checkbox remind users: *AI-powered doc prep, not a law firm.* You can tune the language as needed.
-
-## Next Steps
-- Add email confirmation (use your main app or a service like Resend/SendGrid) keyed on `order_id`.
-- Build Stripe webhooks in your main app to mark orders as paid.
-- Add per-document dynamic fields (e.g., for LLC: state, members, capital splits). A simple approach is to show/hide fields based on the selected `doc_type` with a small JS snippet.
-
-© 2025 eLegalBoom

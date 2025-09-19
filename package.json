@@ -1,0 +1,11 @@
+{
+  "name": "elegalboom-state-aware",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "stripe": "^16.0.0",
+    "pdfkit": "^0.15.0",
+    "nodemailer": "^6.9.0"
+  }
+}
