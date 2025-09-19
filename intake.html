@@ -1,57 +1,20 @@
-
-<!doctype html><html><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Provide Your Information</title>
-<link rel="stylesheet" href="styles.css?v=fix1"/>
-<script src="config.js?v=fix1"></script>
-<script src="intake.js?v=fix1" defer></script>
-</head><body>
-<div class="wrap">
-  <div class="topbar"><a class="btn" href="products.html">Back to Products</a></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Information</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="intake.js" defer></script>
+</head>
+<body>
   <h1>Your Information</h1>
-  <div class="panel">
-    <form id="f">
-      <div class="grid2">
-        <div><label>Full Name<input name="full_name"/></label></div>
-        <div><label>Email<input name="email"/></label></div>
-      </div>
-      <div><label>Phone<input name="phone"/></label></div>
-      <div><label>State<select name="state" id="state"></select></label></div>
-
-      <div id="llc" class="card" style="display:none"><strong>LLC Formation</strong>
-        <div class="grid2">
-          <div><label>LLC Name<input name="llc_name"/></label></div>
-          <div><label>Registered Agent<input name="ra_name"/></label></div>
-        </div>
-      </div>
-
-      <div id="partnership" class="card" style="display:none"><strong>Partnership Agreement</strong>
-        <div class="grid2">
-          <div><label>Partnership Name<input name="p_name"/></label></div>
-          <div><label>Effective Date<input name="p_date" placeholder="MM/DD/YYYY"/></label></div>
-        </div>
-      </div>
-
-      <div id="nda" class="card" style="display:none"><strong>NDA</strong>
-        <div class="grid2">
-          <div><label>Party A<input name="nda_a"/></label></div>
-          <div><label>Party B<input name="nda_b"/></label></div>
-        </div>
-      </div>
-
-      <div id="wfh" class="card" style="display:none"><strong>Work‑for‑Hire</strong>
-        <div class="grid2">
-          <div><label>Contractor Name<input name="wfh_contractor"/></label></div>
-          <div><label>Scope<input name="wfh_scope"/></label></div>
-        </div>
-      </div>
-
-      <div class="control">
-        <a class="btn" href="products.html">Back</a>
-        <button class="btn primary" type="submit">Purchase</button>
-      </div>
-    </form>
-  </div>
-  <p class="footer">© ElegalBoom</p>
-</div>
-</body></html>
+  <form id="intake-form">
+    <label for="state">State of Formation</label>
+    <input type="text" id="state" name="state" required><br><br>
+    <label for="name">Full Name</label>
+    <input type="text" id="name" name="name" required><br><br>
+    <button type="submit">Purchase</button>
+  </form>
+</body>
+</html>

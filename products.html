@@ -1,29 +1,15 @@
-
-<!doctype html><html><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Select Your Documents</title>
-<link rel="stylesheet" href="styles.css?v=fix1"/>
-<script src="config.js?v=fix1"></script>
-<script src="products.js?v=fix1" defer></script>
-</head><body>
-<div class="wrap">
-  <div class="topbar"><a class="btn" href="index.html">Home</a></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select Your Documents</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="products.js" defer></script>
+</head>
+<body>
   <h1>Select Your Documents</h1>
-  <div class="panel">
-    <p><strong>These are the prices you’ll pay.</strong> Your total will be shown below.</p>
-    <p class="note">💡 Add 3+ documents and you’ll automatically save 25%. Expedited is a flat add‑on (not discounted).</p>
-    <div id="list" class="row"></div>
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <strong>Estimated total</strong><div id="total">$0</div>
-      </div>
-      <p class="note">Payments are processed securely by Stripe.</p>
-      <div class="control">
-        <a class="btn" id="toIntake" href="intake.html">Provide Your Information</a>
-        <button class="btn primary" id="buy">Buy Selected</button>
-      </div>
-    </div>
-  </div>
-  <p class="footer">© ElegalBoom</p>
-</div>
-</body></html>
+  <div id="product-list"></div>
+  <button onclick="window.location.href='intake.html'">Provide Your Information</button>
+</body>
+</html>
