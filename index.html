@@ -1,49 +1,37 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Welcome to ElegalBoom</title>
-  <link rel="stylesheet" href="/styles.css"/>
   <style>
-    .wrap{max-width:980px;margin:0 auto;padding:16px}
-    .hero{background:#fff;border:1px solid #e6eaf1;border-radius:18px;padding:28px;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.06)}
-    h1{margin:0 0 8px;font-size:clamp(26px,4vw,38px)}
-    p{margin:0 0 14px;color:#374151}
-    .cta{display:inline-block;padding:12px 20px;border-radius:10px;background:#2563eb;color:#fff;text-decoration:none;font-weight:800}
-    .pills{display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap}
-    .pill{background:#f3f6fb;border:1px solid #e6eaf1;border-radius:999px;padding:8px 14px;font-weight:700;color:#374151}
-    .hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-    .btn{display:inline-block;padding:10px 14px;border-radius:10px;background:#111827;color:#fff;text-decoration:none;font-weight:700}
-    .sub{color:#6b7280;font-size:14px;margin-top:10px}
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; text-align: center; background: #f9f9f9; }
+    header { padding: 20px; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    h1 { margin-top: 40px; font-size: 2em; }
+    p { font-size: 1.1em; color: #555; margin: 20px 0; }
+    .btn { display: inline-block; margin: 10px; padding: 12px 25px; font-size: 1em; border-radius: 6px; text-decoration: none; }
+    .primary { background: #007bff; color: #fff; }
+    .secondary { background: #eee; color: #333; }
+    footer { margin-top: 40px; font-size: 0.9em; color: #777; }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="hdr">
-      <div style="font-weight:900">ElegalBoom</div>
-      <div style="display:flex;gap:8px">
-        <a href="/products.html" class="btn">View Products</a>
-        <a href="/intake.html" class="btn" style="background:#2563eb">Skip to Intake</a>
-      </div>
+  <header>
+    <h2>ElegalBoom</h2>
+  </header>
+  <main>
+    <h1>Welcome to ElegalBoom.com</h1>
+    <p>We’ll securely collect your information and generate the documents you need — tailored to your state.</p>
+    <a href="products.html" class="btn primary">Get Started</a>
+    <a href="products.html" class="btn secondary">View Products</a>
+    <div style="margin-top:30px;">
+      <span class="secondary btn">Secure Stripe Checkout</span>
+      <span class="secondary btn">State-Aware Forms (50 States)</span>
+      <span class="secondary btn">Instant Document Delivery</span>
     </div>
-
-    <div class="hero">
-      <h1>Welcome to ElegalBoom.com</h1>
-      <p>We’ll securely collect your information and generate the documents you need — tailored to your state.</p>
-      <!-- Primary CTA now goes to the product list -->
-      <a href="/products.html" class="cta">Get Started</a>
-
-      <div class="pills">
-        <div class="pill">Secure Stripe Checkout</div>
-        <div class="pill">State‑Aware Forms (50 States)</div>
-        <div class="pill">Instant Document Delivery</div>
-      </div>
-      <div class="sub">Answer a few guided questions, review your details, and check out securely.</div>
-    </div>
-
-    <footer style="text-align:center;margin-top:18px;color:#6b7280">&copy; <span id="y"></span> ElegalBoom</footer>
-  </div>
-  <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+  </main>
+  <footer>
+    <p>© 2025 ElegalBoom</p>
+  </footer>
 </body>
 </html>

@@ -1,148 +1,34 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>ElegalBoom — Select Your Documents</title>
-  <link rel="stylesheet" href="/styles.css"/>
-  <script src="https://js.stripe.com/v3/"></script>
-  <script src="/config.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select Your Documents</title>
   <style>
-    .chooser{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-    @media (max-width:900px){.chooser{grid-template-columns:1fr}}
-    .opt{display:flex;align-items:center;gap:12px;border:1px solid #e6eaf1;background:#fff;border-radius:14px;padding:14px}
-    .name{font-weight:800}
-    .price{font-weight:800}
-    .right{margin-left:auto;text-align:right}
-    .sum{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding:14px;border:1px dashed #cfd6e3;border-radius:12px;background:#f7f9fc}
-    .muted{color:#6b7280}
-    .note{margin-top:10px;font-size:14px;color:#6b7280;text-align:center}
+    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f9f9f9; }
+    h1 { text-align: center; margin-bottom: 20px; }
+    .product-list { max-width: 700px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px;
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .product { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
+    .product:last-child { border-bottom: none; }
+    .actions { text-align: center; margin-top: 20px; }
+    .btn { display: inline-block; padding: 12px 25px; font-size: 1em; border-radius: 6px; text-decoration: none; }
+    .primary { background: #007bff; color: #fff; }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="hdr">
-      <h1 style="margin:0">Select Your Documents</h1>
-      <a class="btn" href="/index.html">Home</a>
+  <h1>Select Your Documents</h1>
+  <div class="product-list">
+    <div class="product"><label><input type="checkbox"> Partnership Agreement</label> <span>$199</span></div>
+    <div class="product"><label><input type="checkbox"> LLC Formation</label> <span>$299</span></div>
+    <div class="product"><label><input type="checkbox"> Work-for-Hire Agreement</label> <span>$79</span></div>
+    <div class="product"><label><input type="checkbox"> LegalBoom Document Bundle</label> <span>$449</span></div>
+    <div class="product"><label><input type="checkbox"> Expedited Processing</label> <span>$79</span></div>
+    <div class="product"><label><input type="checkbox"> Non-Disclosure Agreement (NDA)</label> <span>$49</span></div>
+    <p style="margin-top: 15px; font-size: 0.95em; color: #555;">These are the prices you’ll pay. Payment is processed securely by Stripe.</p>
+    <div class="actions">
+      <a href="intake.html" class="btn primary">Provide Your Information</a>
     </div>
-
-    <div class="card">
-      <p class="muted">Pick one or more document types or services. These are the prices you’ll pay. Your total will be shown below.</p>
-      <div id="status" class="muted" style="margin:8px 0 12px">Checking Stripe config…</div>
-
-      <div class="chooser">
-        <label class="opt">
-          <input type="checkbox" data-key="WORK_FOR_HIRE" data-amount="79"/>
-          <div>
-            <div class="name">Work‑for‑Hire Agreement</div>
-            <div class="muted">Standard engagement for contractors</div>
-          </div>
-          <div class="right"><div class="price">$79</div></div>
-        </label>
-
-        <label class="opt">
-          <input type="checkbox" data-key="BUNDLE" data-amount="449"/>
-          <div>
-            <div class="name">LegalBoom Document Bundle</div>
-            <div class="muted">Our most popular set</div>
-          </div>
-          <div class="right"><div class="price">$449</div></div>
-        </label>
-
-        <label class="opt">
-          <input type="checkbox" data-key="EXPEDITED" data-amount="79"/>
-          <div>
-            <div class="name">Expedited Processing</div>
-            <div class="muted">Priority processing by our system</div>
-          </div>
-          <div class="right"><div class="price">$79</div></div>
-        </label>
-
-        <label class="opt">
-          <input type="checkbox" data-key="NDA" data-amount="49"/>
-          <div>
-            <div class="name">Non‑Disclosure Agreement (NDA)</div>
-            <div class="muted">Mutual confidentiality agreement</div>
-          </div>
-          <div class="right"><div class="price">$49</div></div>
-        </label>
-
-        <label class="opt">
-          <input type="checkbox" data-key="PARTNERSHIP" data-amount="199"/>
-          <div>
-            <div class="name">Partnership Agreement</div>
-            <div class="muted">Define roles and ownership</div>
-          </div>
-          <div class="right"><div class="price">$199</div></div>
-        </label>
-
-        <label class="opt">
-          <input type="checkbox" data-key="LLC" data-amount="299"/>
-          <div>
-            <div class="name">LLC Formation</div>
-            <div class="muted">State‑aware LLC formation package</div>
-          </div>
-          <div class="right"><div class="price">$299</div></div>
-        </label>
-      </div>
-
-      <div class="sum">
-        <div><strong>Estimated total</strong></div>
-        <div id="total" class="price">$0</div>
-      </div>
-
-      <p class="note">Payments are processed securely by Stripe.</p>
-
-      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px">
-        <a class="btn" href="/intake.html" style="background:#111827">Continue to Intake</a>
-        <button class="btn" id="buy">Proceed to Payment</button>
-      </div>
-    </div>
-
-    <footer>&copy; <span id="y"></span> ElegalBoom</footer>
   </div>
-
-<script>
-  const statusEl = document.getElementById('status');
-  const ready = typeof STRIPE_PUBLISHABLE_KEY === 'string' && STRIPE_PUBLISHABLE_KEY.startsWith('pk_');
-  const missing = Object.values(PRICE_IDS).some(v => !v || v.startsWith('price_xxx'));
-  statusEl.textContent = ready ? (missing ? 'Stripe config: add your Price IDs in config.js' : 'Stripe config: OK') : 'Stripe config: add your publishable key in config.js';
-
-  const stripe = ready ? Stripe(STRIPE_PUBLISHABLE_KEY) : null;
-
-  function refreshTotal(){
-    let sum = 0;
-    document.querySelectorAll('input[type=checkbox][data-amount]').forEach(cb=>{
-      if(cb.checked){ sum += Number(cb.getAttribute('data-amount')||0); }
-    });
-    document.getElementById('total').textContent = '$' + sum;
-  }
-  document.querySelectorAll('input[type=checkbox]').forEach(cb=>cb.addEventListener('change', refreshTotal));
-  refreshTotal();
-
-  document.getElementById('buy').onclick = async () => {
-    if(!stripe){ alert('Add your Stripe publishable key in config.js'); return; }
-    const selected = Array.from(document.querySelectorAll('input[type=checkbox]')).filter(cb=>cb.checked).map(cb=>cb.getAttribute('data-key'));
-    if(selected.length===0){ alert('Select at least one item.'); return; }
-    const lineItems = selected.map(key => {
-      const price = PRICE_IDS[key];
-      if(!price || price.startsWith('price_xxx')){
-        alert('Missing Price ID for ' + key + ' in config.js'); throw new Error('Missing price');
-      }
-      return { price, quantity: 1 };
-    });
-    try {
-      const {error} = await stripe.redirectToCheckout({
-        lineItems,
-        mode: 'payment',
-        successUrl: window.location.origin + '/success.html',
-        cancelUrl: window.location.origin + '/cancel.html',
-      });
-      if(error){ alert(error.message); }
-    } catch(e){ /* handled */ }
-  };
-
-  document.getElementById('y').textContent=new Date().getFullYear();
-</script>
 </body>
 </html>
